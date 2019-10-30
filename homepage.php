@@ -15,7 +15,7 @@
 		<input type="submit">
 		</form>
 
-		<form action="signup.html" method="post">
+		<form action="signup.php" method="post">
 		<input type="submit" value="SIGN UP HERE!">
 		</form>
 
