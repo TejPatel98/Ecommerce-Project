@@ -21,7 +21,7 @@ $result = $conn->query($sql);
 
 if ($result->num_rows == 1) {
 	//echo "You are in the system!";
-	header("Location: http://172.31.148.24/tej/homepage.php");
+	header("Location: http://172.31.148.24/Ecommerce-Project/homepage.php");
 } else {
     echo "Cannot find you, please go back and sign up.";
 }
