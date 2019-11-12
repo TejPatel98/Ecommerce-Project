@@ -1,4 +1,6 @@
 <?php 
+include("connect.php");
+/*
 $servername = "localhost"; 
 $username = "tej"; 
 $password = "hellophpworld"; 
@@ -11,6 +13,7 @@ $conn = new mysqli($servername, $username, $password, $dbname);
 if (!$conn){ 
 	die("Connection failed: try a different User Id or email or User Name."); 
 }
+ */
 echo "hello";
 
 $userName = $_POST["username"];

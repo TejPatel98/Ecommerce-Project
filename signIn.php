@@ -1,5 +1,6 @@
 <?php
-
+include("connect.php");
+/*
 $servername = "localhost";
 $username = "tej";
 $password = "hellophpworld";
@@ -12,7 +13,7 @@ $conn = new mysqli($servername, $username, $password, $dbname);
 if (!$conn){
         die("Connection failed: " . mysqli_connect_error());
 }
-
+*/
 $userName = $_POST["username"];
 $passWord = $_POST["password"];
 

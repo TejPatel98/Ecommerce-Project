@@ -65,14 +65,14 @@ body {
 
 <div class="topnav">
   <a class="active" href="#home">Home</a>
-  <a href="#cart">Cart</a>
-  <a href="#contact">Contact</a>
+  <a href="#cart">Purchase</a>
+  <a href="#contact">Order</a>
   <input type="text" placeholder="Search..">
 </div>
 
 <?php
-
-
+include('connect.php');
+/*
 $servername = "localhost";
 $username = "tej";
 $password = "hellophpworld";
@@ -85,7 +85,7 @@ $conn = new mysqli($servername, $username, $password, $dbname);
 if (!$conn){
         die("Connection failed: " . mysqli_connect_error());
 }
-
+ */
 $sql = "select * from Product;";
 $result = mysqli_query($conn, $sql);
 $data = array();
