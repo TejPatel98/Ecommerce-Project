@@ -18,10 +18,17 @@ $passWord = $_POST["password"];
 
 $sql = "select * from Individual where username='".$userName."' and password='".$passWord."';";
 $result = $conn->query($sql);
-
 if ($result->num_rows == 1) {
-	//echo "You are in the system!";
-	header("Location: http://172.31.148.24/Ecommerce-Project/homepage.php");
+	$row = mysqli_fetch_assoc($result);
+	if($row["permissionLevel"] == "E"){
+		header("Location: http://172.31.148.24/Ecommerce-Project/Employee.php");
+	}
+	elseif($row["permissionLevel"] == "M"){
+		header("Location: http://172.31.148.24/Ecommerce-Project/Manager.php");
+	}
+	else{
+		header("Location: http://172.31.148.24/Ecommerce-Project/homepage.php");
+	}	
 } else {
     echo "Cannot find you, please go back and sign up.";
 }
