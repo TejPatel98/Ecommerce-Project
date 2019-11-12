@@ -1,6 +1,9 @@
 <?php
-session_start();
 include('connect.php');
+$identification = $_GET["identification"];
+
+session_start();
+
 $status="";
 if (isset($_POST['productId']) && $_POST['productId']!=""){
 $productId = $_POST['productId'];
@@ -61,7 +64,7 @@ while($row = mysqli_fetch_assoc($result)){
 		echo "<div class='product_wrapper'>
 			  <form method='post' action=''>
 			  <input type='hidden' name='productId' value=".$row['productId']." />
-			  <div class='image'><img src='".$row['image']."' /></div>
+			  <div class='image'><img src='./product-images/".$row['image']."' /></div>
 			  <div class='name'>".$row['name']."</div>
 		   	  <div class='cost'>$".$row['cost']."</div>
 			  <button type='submit' class='buy'>Buy Now</button>

@@ -1,4 +1,5 @@
 <?php
+//session_start();
 include("connect.php");
 /*
 $servername = "localhost";
@@ -22,18 +23,24 @@ $result = $conn->query($sql);
 if ($result->num_rows == 1) {
 	$row = mysqli_fetch_assoc($result);
 	if($row["permissionLevel"] == "E"){
-		header("Location: http://172.31.148.24/Ecommerce-Project/Employee.php");
+		$identification = $row["individualId"];
+		$_SESSION['identification'] = $identification;
+		header("Location: http://172.31.148.24/Ecommerce-Project/Employee.php?identification=".$identification);
 	}
 	elseif($row["permissionLevel"] == "M"){
-		header("Location: http://172.31.148.24/Ecommerce-Project/Manager.php");
+		$identification = $row["individualId"];
+		$_SESSION['identification'] = $identification;
+		header("Location: http://172.31.148.24/Ecommerce-Project/Manager.php?identification=".$identification);
 	}
 	else{
-		header("Location: http://172.31.148.24/Ecommerce-Project/homepage.php");
+		$identification = $row["individualId"];
+		$_SESSION['identification'] = $identification;
+		header("Location: http://172.31.148.24/Ecommerce-Project/homepage.php?identification=".$identification);
+	exit();
 	}	
 } else {
     echo "Cannot find you, please go back and sign up.";
 }
-
 mysqli_close($conn);
 
 
