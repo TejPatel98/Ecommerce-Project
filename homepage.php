@@ -1,113 +1,83 @@
+<?php
+session_start();
+include('connect.php');
+$status="";
+if (isset($_POST['productId']) && $_POST['productId']!=""){
+$productId = $_POST['productId'];
+$result = mysqli_query($conn,"SELECT * FROM `Product` WHERE `productId`='$productId'");
+$row = mysqli_fetch_assoc($result);
+$name = $row['name'];
+$productId = $row['productId'];
+$cost = $row['cost'];
+$image = $row['image'];
 
-<!DOCTYPE html>
+$cartArray = array(
+	$productId=>array(
+	'name'=>$name,
+	'productId'=>$productId,
+	'cost'=>$cost,
+	'quantity'=>1,
+	'image'=>$image)
+);
+
+if(empty($_SESSION["shopping_cart"])) {
+	$_SESSION["shopping_cart"] = $cartArray;
+	$status = "<div class='box'>Product is added to your cart!</div>";
+}else{
+	$array_keys = array_keys($_SESSION["shopping_cart"]);
+	if(in_array($productId,$array_keys)) {
+		$status = "<div class='box' style='color:red;'>
+		Product is already added to your cart!</div>";	
+	} else {
+	$_SESSION["shopping_cart"] = array_merge($_SESSION["shopping_cart"],$cartArray);
+	$status = "<div class='box'>Product is added to your cart!</div>";
+	}
+
+	}
+}
+?>
 <html>
 <head>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<style>
-* {box-sizing: border-box;}
-
-body {
-  margin: 0;
-  font-family: Arial, Helvetica, sans-serif;
-}
-
-.topnav {
-  overflow: hidden;
-  background-color: #e9e9e9;
-}
-
-.topnav a {
-  float: left;
-  display: block;
-  color: black;
-  text-align: center;
-  padding: 14px 16px;
-  text-decoration: none;
-  font-size: 17px;
-}
-
-.topnav a:hover {
-  background-color: #ddd;
-  color: black;
-}
-
-.topnav a.active {
-  background-color: #2196F3;
-  color: white;
-}
-
-.topnav input[type=text] {
-  float: right;
-  padding: 6px;
-  margin-top: 8px;
-  margin-right: 16px;
-  border: none;
-  font-size: 17px;
-}
-
-@media screen and (max-width: 600px) {
-  .topnav a, .topnav input[type=text] {
-    float: none;
-    display: block;
-    text-align: left;
-    width: 100%;
-    margin: 0;
-    padding: 14px;
-  }
-  
-  .topnav input[type=text] {
-    border: 1px solid #ccc;  
-  }
-}
-</style>
+<title>Demo Simple Shopping Cart using PHP and MySQL - AllPHPTricks.com</title>
+<link rel='stylesheet' href='css/style.css' type='text/css' media='all' />
 </head>
 <body>
+<div style="width:700px; margin:50 auto;">
 
-<div class="topnav">
-  <a class="active" href="#home">Home</a>
-  <a href="#cart">Purchase</a>
-  <a href="#contact">Order</a>
-  <input type="text" placeholder="Search..">
-</div>
+<h2>Demo Simple Shopping Cart using PHP and MySQL</h2>   
 
 <?php
-include('connect.php');
-/*
-$servername = "localhost";
-$username = "tej";
-$password = "hellophpworld";
-$dbname = "eCommerce";
-
-// Create connection 
-$conn = new mysqli($servername, $username, $password, $dbname);
-
-// Check connection 
-if (!$conn){
-        die("Connection failed: " . mysqli_connect_error());
-}
- */
-$sql = "select * from Product;";
-$result = mysqli_query($conn, $sql);
-$data = array();
-
-echo '<table border="0" cellspacing="2" cellpadding="2"> 
-      <tr> 
-          <td> <font face="Arial">Name</font> </td> 
-          <td> <font face="Arial">Cost</font> </td> 
-      </tr>';
-
-
-while ($row = mysqli_fetch_assoc($result)) {
-
-	echo '<tr> 
-                  <td>'.$row['name'].'</td> 
-                  <td>'.$row['cost'].'</td> 
-              </tr>';
-
+if(!empty($_SESSION["shopping_cart"])) {
+$cart_count = count(array_keys($_SESSION["shopping_cart"]));
+?>
+<div class="cart_div">
+<a href="cart.php"><img src="cart-icon.png" /> Cart<span><?php echo $cart_count; ?></span></a>
+</div>
+<?php
 }
 
+$result = mysqli_query($conn,"SELECT * FROM Product");
+while($row = mysqli_fetch_assoc($result)){
+		echo "<div class='product_wrapper'>
+			  <form method='post' action=''>
+			  <input type='hidden' name='productId' value=".$row['productId']." />
+			  <div class='image'><img src='".$row['image']."' /></div>
+			  <div class='name'>".$row['name']."</div>
+		   	  <div class='cost'>$".$row['cost']."</div>
+			  <button type='submit' class='buy'>Buy Now</button>
+			  </form>
+		   	  </div>";
+        }
+mysqli_close($conn);
 ?>
 
+<div style="clear:both;"></div>
 
+<div class="message_box" style="margin:10px 0px;">
+<?php echo $status; ?>
+</div>
+
+<br /><br />
+</div>
 </body>
 </html>
