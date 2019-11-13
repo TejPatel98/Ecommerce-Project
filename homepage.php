@@ -7,7 +7,7 @@ session_start();
 $status="";
 if (isset($_POST['productId']) && $_POST['productId']!=""){
 $productId = $_POST['productId'];
-$result = mysqli_query($conn,"SELECT * FROM `Product` WHERE `productId`='$productId'");
+$result = mysqli_query($conn,"SELECT * FROM Product WHERE productId='$productId'");
 $row = mysqli_fetch_assoc($result);
 $name = $row['name'];
 $productId = $row['productId'];
@@ -23,10 +23,10 @@ $cartArray = array(
 	'image'=>$image)
 );
 
-if(empty($_SESSION["shopping_cart"])) {
+if(count($_SESSION["shopping_cart"])===0) {
 	$_SESSION["shopping_cart"] = $cartArray;
 	$status = "<div class='box'>Product is added to your cart!</div>";
-}else{
+}else	
 	$array_keys = array_keys($_SESSION["shopping_cart"]);
 	if(in_array($productId,$array_keys)) {
 		$status = "<div class='box' style='color:red;'>
@@ -36,8 +36,8 @@ if(empty($_SESSION["shopping_cart"])) {
 	$status = "<div class='box'>Product is added to your cart!</div>";
 	}
 
-	}
 }
+
 ?>
 <html>
 <head>
@@ -51,7 +51,7 @@ if(empty($_SESSION["shopping_cart"])) {
 
 <?php
 if(!empty($_SESSION["shopping_cart"])) {
-$cart_count = count(array_keys($_SESSION["shopping_cart"]));
+$cart_count = count(array_keys($_SESSION["shopping_cart"])) - 1;
 ?>
 <div class="cart_div">
 <a href="cart.php?identification=<?php echo $identification?>"><img src="cart-icon.png" /> Cart<span><?php echo $cart_count; ?></span></a>
@@ -71,7 +71,7 @@ while($row = mysqli_fetch_assoc($result)){
 			  </form>
 		   	  </div>";
         }
-mysqli_close($conn);
+//mysqli_close($conn);
 ?>
 
 <div style="clear:both;"></div>

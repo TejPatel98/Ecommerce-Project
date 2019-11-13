@@ -64,7 +64,8 @@ if(isset($_SESSION["shopping_cart"])){
 <td>ITEMS TOTAL</td>
 </tr>	
 <?php		
-foreach ($_SESSION["shopping_cart"] as $product){
+foreach (array_slice($_SESSION["shopping_cart"],1) as $product){
+	
 ?>
 <tr>
 <td><img src='<?php "./product-images/".$product["image"]; ?>' width="50" height="40" /></td>

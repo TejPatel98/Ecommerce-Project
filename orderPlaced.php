@@ -29,6 +29,7 @@ if(isset($_POST['History'])){
 	echo '<table border="0" cellspacing="2" cellpadding="2"> 
       <tr> 
           <td> <font face="Arial">Name of the Product</font> </td> 
+	  <td> <font face="Arial">Quantity</font> </td> 
           <td> <font face="Arial">Total Cost</font> </td> 
           <td> <font face="Arial">Status</font> </td> 
       </tr>';
@@ -37,6 +38,7 @@ if(isset($_POST['History'])){
 	while ($row = mysqli_fetch_assoc($result)) {
 		echo '<tr> 
 			<td>'.$row['name'].'</td> 
+			<td>'.$row['quantity'].'</td> 
                 	<td>'.$row['cost']*$row['quantity'].'</td> 
 			<td>'.$row['orderStatus'].'</td> 
         	      </tr>';
