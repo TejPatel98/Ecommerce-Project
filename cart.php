@@ -148,7 +148,8 @@ if(isset($_POST['Order'])){
 
                 $conn->close();
 
-	}	
+	}
+	header("Location: http://172.31.148.24/Ecommerce-Project/orderPlaced.php?identification=".$identification);	
 }
 
 ?>
