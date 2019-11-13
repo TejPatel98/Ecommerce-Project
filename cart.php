@@ -67,7 +67,7 @@ if(isset($_SESSION["shopping_cart"])){
 foreach ($_SESSION["shopping_cart"] as $product){
 ?>
 <tr>
-<td><img src='<?php echo $product["image"]; ?>' width="50" height="40" /></td>
+<td><img src='<?php "./product-images/".$product["image"]; ?>' width="50" height="40" /></td>
 <td><?php echo $product["name"]; ?><br />
 <form method='post' action=''>
 <input type='hidden' name='productId' value="<?php echo $product["productId"]; ?>" />
@@ -108,24 +108,55 @@ $total_price += ($product["cost"]*$product["quantity"]);
 	}
 ?>
 </div>
+<br /><br />
+<br><br>
+<form action = ""  method = "post">
+<input type="submit" name="Order" value="submit"/>
+</form>
+<?php
+if(isset($_POST['Order'])){
 
+
+	$transactionId = rand(0,20) * rand(1,20) * rand(0, 100)*rand(1,30);
+	include('connect.php');
+	$identification = $_GET["identification"];
+
+	foreach($_SESSION["shopping_cart"] as $row){
+
+//		echo $row['name']." is the name, ".$row['cost']."is the cost & ".$row['quantity']."is the quantity ";
+		$orderId = rand(0,20) * rand(1,20) * rand(0, 100)*rand(0,99)*rand(0,18);	
+		$order = "insert into Cart values (".$orderId.",".$row['quantity'].",'C','P',".$row['cost'].");";
+		echo $order;
+		include('connect.php');
+		if ($conn->query($order) === TRUE) {
+   			 echo "order for ".$row['name']." placed!";
+		} else {
+    			echo "Error: " . $sql . "<br>" . $conn->error;
+		}
+
+		$conn->close();
+
+		
+		include('connect.php');
+		$transaction = "insert into Transaction values (".$orderId.", '".$identification."', ".$row['productId'].", ".$transactionId.");";
+		echo $transaction;
+		if($conn->query($transaction) === TRUE) {
+               		echo "transaction completed";
+	       	} else {
+                        echo "Error: " . $sql . "<br>" . $conn->error;
+                }
+
+                $conn->close();
+
+	}	
+}
+
+?>
 <div style="clear:both;"></div>
 
 <div class="message_box" style="margin:10px 0px;">
 <?php echo $status; ?>
 </div>
-
-
-<br /><br />
-<br><br>
-<form action="POST">
-  <input type="submit" name="submit" value="Submit">
-</form>
-<?php
-
-// your php code
-
-?>
 </div>
 </body>
 </html>

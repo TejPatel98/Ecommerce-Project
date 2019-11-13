@@ -23,17 +23,17 @@ $result = $conn->query($sql);
 if ($result->num_rows == 1) {
 	$row = mysqli_fetch_assoc($result);
 	if($row["permissionLevel"] == "E"){
-		$identification = $row["individualId"];
+		$identification = $row["username"];
 		$_SESSION['identification'] = $identification;
 		header("Location: http://172.31.148.24/Ecommerce-Project/Employee.php?identification=".$identification);
 	}
 	elseif($row["permissionLevel"] == "M"){
-		$identification = $row["individualId"];
+		$identification = $row["username"];
 		$_SESSION['identification'] = $identification;
 		header("Location: http://172.31.148.24/Ecommerce-Project/Manager.php?identification=".$identification);
 	}
 	else{
-		$identification = $row["individualId"];
+		$identification = $row["username"];
 		$_SESSION['identification'] = $identification;
 		header("Location: http://172.31.148.24/Ecommerce-Project/homepage.php?identification=".$identification);
 	exit();
