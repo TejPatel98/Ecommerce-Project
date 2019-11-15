@@ -1,11 +1,6 @@
 <?php
 include ('connect.php');
 
-echo "you have placed your order !";
-echo "\n";
-echo "ADD A PICTURE HERE !";
-echo "\n";
-
 $identification = $_GET['identification'];
 	echo $identification;
 ?>
@@ -13,7 +8,9 @@ $identification = $_GET['identification'];
 
 <html>
 <body>
-
+<h1>Congrtulations!</h1>
+<img src="keep-calm-your-order-has-been-placed.png" alt="Simply Easy Learning" width="200"
+	 height="80">
 <form action = ""  method = "post">
 <input type="submit" name="History" value="History"/>
 <input type="submit" name="LogOut" value="LogOut"/>

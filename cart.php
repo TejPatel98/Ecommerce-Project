@@ -2,19 +2,36 @@
 session_start();
 
 $status="";
+
 if (isset($_POST['action']) && $_POST['action']=="remove"){
-if(!empty($_SESSION["shopping_cart"])) {
-	foreach($_SESSION["shopping_cart"] as $key => $value) {
-		if($_POST["productId"] == $key){
-		unset($_SESSION["shopping_cart"][$key]);
+	if(count($_SESSION["shopping_cart"])===1){
+		unset($_SESSION["shopping_cart"]);
+	}
+	elseif(!empty($_SESSION["shopping_cart"])) {
+		$temp = array();
+	//	echo $_POST['productId'];
+		foreach($_SESSION["shopping_cart"] as $foo){
+			$temp[] = $foo['productId'];
+		}
+	foreach($temp as $value) {
+//		echo "...init val...".$value;
+		if($_POST["productId"] == $value){
+		//	foreach($_SESSION["shopping_cart"] as $val){
+		//		echo " ".$val['productId']." ";
+		//	}
+//			echo "=============";
+//			echo "val product id = ".$value;
+		$indexValue = array_search($value, $temp);	
+//		echo " index value is - ".$indexValue;	
+		unset($_SESSION["shopping_cart"][$indexValue]);
 		$status = "<div class='box' style='color:red;'>
 		Product is removed from your cart!</div>";
 		}
-		if(empty($_SESSION["shopping_cart"]))
-		unset($_SESSION["shopping_cart"]);
+//		echo "---".count($_SESSION["shopping_cart"])."---";
 			}		
-		}
+	}
 }
+
 
 if (isset($_POST['action']) && $_POST['action']=="change"){
   foreach($_SESSION["shopping_cart"] as &$value){
@@ -28,7 +45,7 @@ if (isset($_POST['action']) && $_POST['action']=="change"){
 ?>
 <html>
 <head>
-<title>Demo Shopping Cart - AllPHPTricks.com</title>
+<title>Shopping Cart</title>
 <link rel='stylesheet' href='css/style.css' type='text/css' media='all' />
 </head>
 <body>
@@ -64,11 +81,11 @@ if(isset($_SESSION["shopping_cart"])){
 <td>ITEMS TOTAL</td>
 </tr>	
 <?php		
-foreach (array_slice($_SESSION["shopping_cart"],1) as $product){
+foreach (array_slice($_SESSION["shopping_cart"],0) as $product){
 	
 ?>
 <tr>
-<td><img src='<?php "./product-images/".$product["image"]; ?>' width="50" height="40" /></td>
+<td><img src='./product-images/<?php echo $product["image"]; ?>' width="50" height="40" /></td>
 <td><?php echo $product["name"]; ?><br />
 <form method='post' action=''>
 <input type='hidden' name='productId' value="<?php echo $product["productId"]; ?>" />

@@ -7,7 +7,7 @@ session_start();
 $status="";
 if (isset($_POST['productId']) && $_POST['productId']!=""){
 $productId = $_POST['productId'];
-$result = mysqli_query($conn,"SELECT * FROM Product WHERE productId='$productId'");
+$result = mysqli_query($conn,"SELECT * FROM Product WHERE productId='".$productId."'");
 $row = mysqli_fetch_assoc($result);
 $name = $row['name'];
 $productId = $row['productId'];
@@ -22,11 +22,46 @@ $cartArray = array(
 	'quantity'=>1,
 	'image'=>$image)
 );
+$temp = array();
 
-if(count($_SESSION["shopping_cart"])===0) {
+if(empty($_SESSION["shopping_cart"])) {
+	$_SESSION["shopping_cart"] = $cartArray;
+	$temp[]=$productId;
+/*	echo " product id is ".$productId;
+	foreach ($cartArray as $value){
+		echo " ".$value['productId'];
+	}
+ */	$status = "<div class='box'>Product is added to your cart!</div>";
+}else{
+
+	//$array_keys = array_keys($_SESSION["shopping_cart"]);
+	//$array_keys = array_unique($temp);
+//	echo " product id is ".$productId;
+	foreach($_SESSION["shopping_cart"] as $value){
+		$temp[]=$value['productId'];
+	}
+	if(in_array($productId,$temp)) {
+		$status = "<div class='box' style='color:red;'>
+		Product is already added to your cart!</div>";	
+	} else {
+	//$temp[]=$productId;
+	$_SESSION["shopping_cart"] = array_merge($_SESSION["shopping_cart"],$cartArray);
+	$status = "<div class='box'>Product is added to your cart!</div>";
+	}
+/*	echo "session shopping cart \n";
+	foreach ($_SESSION["shopping_cart"] as $value){
+		echo " ".$value['productId'];
+	}
+ */	}
+}
+
+
+
+/*
+if(count($_SESSION["shopping_cart"])==0) {
 	$_SESSION["shopping_cart"] = $cartArray;
 	$status = "<div class='box'>Product is added to your cart!</div>";
-}else	
+}else{	
 	$array_keys = array_keys($_SESSION["shopping_cart"]);
 	if(in_array($productId,$array_keys)) {
 		$status = "<div class='box' style='color:red;'>
@@ -35,13 +70,14 @@ if(count($_SESSION["shopping_cart"])===0) {
 	$_SESSION["shopping_cart"] = array_merge($_SESSION["shopping_cart"],$cartArray);
 	$status = "<div class='box'>Product is added to your cart!</div>";
 	}
-
 }
 
+}
+*/
 ?>
 <html>
 <head>
-<title>Demo Simple Shopping Cart using PHP and MySQL - AllPHPTricks.com</title>
+<title>Shopping Cart</title>
 <link rel='stylesheet' href='css/style.css' type='text/css' media='all' />
 </head>
 <body>
@@ -51,7 +87,7 @@ if(count($_SESSION["shopping_cart"])===0) {
 
 <?php
 if(!empty($_SESSION["shopping_cart"])) {
-$cart_count = count(array_keys($_SESSION["shopping_cart"])) - 1;
+$cart_count = count(array_keys($_SESSION["shopping_cart"]));
 ?>
 <div class="cart_div">
 <a href="cart.php?identification=<?php echo $identification?>"><img src="cart-icon.png" /> Cart<span><?php echo $cart_count; ?></span></a>
@@ -71,7 +107,7 @@ while($row = mysqli_fetch_assoc($result)){
 			  </form>
 		   	  </div>";
         }
-//mysqli_close($conn);
+mysqli_close($conn);
 ?>
 
 <div style="clear:both;"></div>
