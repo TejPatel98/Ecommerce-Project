@@ -40,7 +40,7 @@ while ($row = mysqli_fetch_assoc($result)) {
 		<td>'.$row['name'].'</td>
         	<td>'.$row['cost'].'</td>
 		<form action="" method="post"><td>
-		<input type="text" placeholder="'.$row['quantity'].'" name="temp" maxlength="3" size="3"/>
+		<input type="text" placeholder="'.$row['Quantity'].'" name="temp" maxlength="3" size="3"/>
 		<input type="submit" name="update" value="Update"/>
 		<input type="hidden" name="productId" value="'.$row['productId'].'"/>
 		</td></form>
@@ -70,12 +70,40 @@ while ($row = mysqli_fetch_assoc($result)) {
 </form>
 <?php
 	if($_SERVER['REQUEST_METHOD'] == "POST" and isset($_POST['orders'])){
-		$result = mysqli_query($conn, "select * from Cart where orderStatus = 'P'");
+	//	$result = mysqli_query($conn, "select * from Cart where orderStatus = 'P'");
+		$result = mysqli_query($conn, "select * from Transaction T natural join Cart C join Product on T.ProductId=Product.productId  where orderStatus='P';");
 		while($row = mysqli_fetch_assoc($result)) {
-			echo '<p>Order ID: '.$row['orderId'].' | Quantity: '.$row['quantity'].' | Cost: '.$row['cost'].'</p>';
+			echo '<p>Order ID: '.$row['OrderId'].' | Customer Id: '.$row["Username"].' | Product Name: '.$row["name"].' | Quantity: '.$row['quantity'].' | Cost: '.$row['cost'].'</p>';
 		}
 	}
 ?>
+
+<h2>Ship Orders</h2>
+<form action='' method='post'>
+  Order ID: <input type="text" name="orderID" size="15">
+  <input type="submit" name="ship" value="Submit">
+</form>
+
+
+
+<?php
+if(isset($_POST['ship'])){
+	$bar= "update Cart set orderStatus='S' where orderId=".$_POST["orderID"].";";
+	$value = mysqli_query($conn, $bar);
+	$temp = mysqli_fetch_assoc($value);
+
+	if ($value){
+		echo "The product status changed to shipped!";
+	}
+}
+?>
+
+
+
+
+
+
+
 <h2>Add Inventory Item</h2>
 <form action='' method='post'>
   Product Name: <input type="text" name="name" size="15">

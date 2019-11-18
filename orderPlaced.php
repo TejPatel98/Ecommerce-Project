@@ -2,7 +2,6 @@
 include ('connect.php');
 
 $identification = $_GET['identification'];
-	echo $identification;
 ?>
 
 
