@@ -80,8 +80,24 @@ while ($row = mysqli_fetch_assoc($result)) {
 <form action='' method='post'>
   Product Name: <input type="text" name="name" size="15">
   Keywords: <textarea name="keywords" rows="2" columns="10"></textarea>
-  Product Status: <input type="text" name="productStatus" size="1" maxlength="1">
+ <!-- Product Status: <input type="text" name="productStatus" size="1" maxlength="1">-->
   Cost: <input type="text" name="cost" size="6">
   Image Name: <input type="text" name="image" placeholder="Include .jpg" size="15">
   <input type="submit" name="submit" value="Submit">
 </form>
+
+
+
+<?php
+if(isset($_POST['submit'])){
+	$val = "select max(productId) as newId from Product;";
+	$value = mysqli_query($conn, $val);
+	$temp = mysqli_fetch_assoc($value);
+	$newVal = $temp["newId"]+1;
+	$productAddition = "insert into Product values (".$newVal.", '".$_POST["name"]."', '".$_POST["keywords"]."', NULL, ".$_POST["cost"].", 1, '".$_POST["image"]."');";
+	$foo = mysqli_query($conn, $productAddition);
+	if ($foo){
+		echo "The product has been Added!";
+	}
+}
+?>

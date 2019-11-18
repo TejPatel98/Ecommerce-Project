@@ -9,8 +9,8 @@ $identification = $_GET['identification'];
 <html>
 <body>
 <h1>Congrtulations!</h1>
-<img src="keep-calm-your-order-has-been-placed.png" alt="Simply Easy Learning" width="200"
-	 height="80">
+<img src="keep-calm-your-order-has-been-placed.png" alt="Simply Easy Learning"  width="200"
+	 height="200" align="middle">
 <form action = ""  method = "post">
 <input type="submit" name="History" value="History"/>
 <input type="submit" name="LogOut" value="LogOut"/>
