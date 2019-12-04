@@ -156,7 +156,8 @@ if(isset($_POST['Order'])){
 
 		
 		include('connect.php');
-		$transaction = "insert into Transaction values (".$orderId.", '".$identification."', ".$row['productId'].", ".$transactionId.");";
+		$date = date('Y-m-d');
+		$transaction = "insert into Transaction values (".$orderId.", '".$identification."', ".$row['productId'].", ".$transactionId.", '".$date."');";
 		echo $transaction;
 		if($conn->query($transaction) === TRUE) {
                		echo "transaction completed";

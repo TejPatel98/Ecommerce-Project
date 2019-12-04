@@ -27,16 +27,8 @@ $temp = array();
 if(empty($_SESSION["shopping_cart"])) {
 	$_SESSION["shopping_cart"] = $cartArray;
 	$temp[]=$productId;
-/*	echo " product id is ".$productId;
-	foreach ($cartArray as $value){
-		echo " ".$value['productId'];
-	}
- */	$status = "<div class='box'>Product is added to your cart!</div>";
+	$status = "<div class='box'>Product is added to your cart!</div>";
 }else{
-
-	//$array_keys = array_keys($_SESSION["shopping_cart"]);
-	//$array_keys = array_unique($temp);
-//	echo " product id is ".$productId;
 	foreach($_SESSION["shopping_cart"] as $value){
 		$temp[]=$value['productId'];
 	}
@@ -48,32 +40,16 @@ if(empty($_SESSION["shopping_cart"])) {
 	$_SESSION["shopping_cart"] = array_merge($_SESSION["shopping_cart"],$cartArray);
 	$status = "<div class='box'>Product is added to your cart!</div>";
 	}
-/*	echo "session shopping cart \n";
-	foreach ($_SESSION["shopping_cart"] as $value){
-		echo " ".$value['productId'];
-	}
- */	}
-}
-
-
-
-/*
-if(count($_SESSION["shopping_cart"])==0) {
-	$_SESSION["shopping_cart"] = $cartArray;
-	$status = "<div class='box'>Product is added to your cart!</div>";
-}else{	
-	$array_keys = array_keys($_SESSION["shopping_cart"]);
-	if(in_array($productId,$array_keys)) {
-		$status = "<div class='box' style='color:red;'>
-		Product is already added to your cart!</div>";	
-	} else {
-	$_SESSION["shopping_cart"] = array_merge($_SESSION["shopping_cart"],$cartArray);
-	$status = "<div class='box'>Product is added to your cart!</div>";
 	}
 }
 
+$keyword_query = "SELECT DISTINCT keywords FROM Product;";
+$keyword_data = mysqli_query($conn, $keyword_query);
+$allkeywords = array();
+while ($keywords = mysqli_fetch_array($keyword_data)){
+	$allkeywords[] = $keywords;
 }
-*/
+
 ?>
 <html>
 <head>
@@ -81,9 +57,80 @@ if(count($_SESSION["shopping_cart"])==0) {
 <link rel='stylesheet' href='css/style.css' type='text/css' media='all' />
 </head>
 <body>
-<div style="width:700px; margin:50 auto;">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+* {box-sizing: border-box;}
 
-<h2> Shopping Cart </h2>   
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.topnav {
+  overflow: hidden;
+  background-color: #e9e9e9;
+}
+
+.topnav a {
+  float: left;
+  display: block;
+  color: black;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  font-size: 17px;
+}
+
+.topnav a:hover {
+  background-color: #ddd;
+  color: black;
+}
+
+.topnav a.active {
+  background-color: #2196F3;
+  color: white;
+}
+
+.topnav input[type=text] {
+  float: right;
+  padding: 6px;
+  margin-top: 8px;
+  margin-right: 16px;
+  border: none;
+  font-size: 17px;
+}
+
+@media screen and (max-width: 600px) {
+  .topnav a, .topnav input[type=text] {
+    float: none;
+    display: block;
+    text-align: left;
+    width: 100%;
+    margin: 0;
+    padding: 14px;
+  }
+
+  .topnav input[type=text] {
+    border: 1px solid #ccc;
+  }
+}
+</style>
+</head>
+<body>
+
+<div class="topnav">
+  <a href=>Toys</a>
+  <select>Search
+  <option default>All Keywords</option>
+  <?php
+    foreach($allkeywords as $keyword){
+      echo "<option>$keyword[0]</option>";
+    }
+  ?>
+  </select>
+</div>
+
+<div style="width:700px; margin:50 auto;">
 
 <?php
 if(!empty($_SESSION["shopping_cart"])) {
