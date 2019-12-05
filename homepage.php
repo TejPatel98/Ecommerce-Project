@@ -124,8 +124,10 @@ body {
 
 <form action='#' method=POST>
 <select name="category">
-<?php
-    foreach($allkeywords as $keyword){?>
+
+	<option default value="all">All Categories</option>
+   <?php    
+	foreach($allkeywords as $keyword){?>
 	    <option value="<?php echo $keyword[0];?>"><?php echo $keyword[0];?></option>";
    <?php }
 ?>
@@ -135,8 +137,11 @@ body {
 
 <?php
 if(isset($_POST['submit'])){
+$select_val=NULL;	
 $selected_val = $_POST['category'];  // Storing Selected Value In Variable
-}
+echo "got ".$selected_val;
+if ($selected_val == NULL || $selected_val=="all"){
+
 ?>
 </div>
 
@@ -152,7 +157,7 @@ $cart_count = count(array_keys($_SESSION["shopping_cart"]));
 <?php
 }
 
-$result = mysqli_query($conn,"SELECT * FROM Product");
+$result = mysqli_query($conn,"SELECT * FROM Product where keywords='".$selected_val."';");
 while($row = mysqli_fetch_assoc($result)){
 		echo "<div class='product_wrapper'>
 			  <form method='post' action=''>
@@ -165,6 +170,46 @@ while($row = mysqli_fetch_assoc($result)){
 		   	  </div>";
         }
 mysqli_close($conn);
+
+}
+}
+else{
+
+?>
+</div>
+
+<div style="width:700px; margin:50 auto;">
+
+<?php
+if(!empty($_SESSION["shopping_cart"])) {
+$cart_count = count(array_keys($_SESSION["shopping_cart"]));
+?>
+<div class="cart_div">
+<a href="cart.php?identification=<?php echo $identification?>"><img src="cart-icon.png" /> Cart<span><?php echo $cart_count; ?></span></a>
+</div>
+<?php
+}
+
+$result = mysqli_query($conn,"SELECT * FROM Product where keywords='".$selected_val."';");
+while($row = mysqli_fetch_assoc($result)){
+		echo "<div class='product_wrapper'>
+			  <form method='post' action=''>
+			  <input type='hidden' name='productId' value=".$row['productId']." />
+			  <div class='image'><img src='./product-images/".$row['image']."' /></div>
+			  <div class='name'>".$row['name']."</div>
+		   	  <div class='cost'>$".$row['cost']."</div>
+			  <button type='submit' class='buy'>Buy Now</button>
+			  </form>
+		   	  </div>";
+        }
+mysqli_close($conn);
+
+}
+
+
+
+
+
 ?>
 
 <div style="clear:both;"></div>
