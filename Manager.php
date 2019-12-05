@@ -111,7 +111,87 @@
                                     </div>
                                 </div>";
                 }
-            ?>
+		?>
+<?php
+
+        if($_SERVER['REQUEST_METHOD'] == "POST" and isset($_POST['update'])){
+
+                $result = mysqli_query($conn, "select * from Product where productId = ".$_POST['productId']."");
+                while($row = mysqli_fetch_assoc($result)) {
+
+                        $string = $_POST['temp'];
+                        $num = (int)$string;
+                        $result = mysqli_query($conn, "update Product set quantity = ".$string." where productId = ".$row['productId'].";");
+                        $row['quantity']=$num;
+                }
+
+        }
+?>
+<h2>Pending Orders</h2>
+<form action='' method='post'>
+<input type="submit" name="orders" value="View Pending Orders"/>
+</form>
+<?php
+        if($_SERVER['REQUEST_METHOD'] == "POST" and isset($_POST['orders'])){
+        //      $result = mysqli_query($conn, "select * from Cart where orderStatus = 'P'");
+                $result = mysqli_query($conn, "select * from Transaction T natural join Cart C join Product on T.ProductId=Product.productId  where orderStatus='P';");
+                while($row = mysqli_fetch_assoc($result)) {
+                        echo '<p><b>Order ID</b>: '.$row['OrderId'].'   <b>Transaction Date</b>: '.$row['TransactionDate'].'   <b>Customer Id</b>: '.$row["Username"].'   <b>Product Name</b>: '.$row["name"].'   <b>Quantity</b>: '.$row['quantity'].'   <b>Cost</b>: '.$row['cost'].'</p>';
+                }
+        }
+?>
+
+<h2>Ship Orders</h2>
+<form action='' method='post'>
+  Order ID: <input type="text" name="orderID" size="15">
+  <input type="submit" name="ship" value="Submit">
+</form>
+
+
+
+<?php
+if(isset($_POST['ship'])){
+        $bar= "update Cart set orderStatus='S' where orderId=".$_POST["orderID"].";";
+        $value = mysqli_query($conn, $bar);
+        $temp = mysqli_fetch_assoc($value);
+
+        if ($value){
+                echo "The product status changed to shipped!";
+        }
+}
+?>
+
+
+
+
+
+
+
+<h2>Add Inventory Item</h2>
+<form action='' method='post'>
+  Product Name: <input type="text" name="name" size="15">
+  Keyword: <textarea name="keywords" rows="2" columns="10"></textarea>
+ <!-- Product Status: <input type="text" name="productStatus" size="1" maxlength="1">-->
+  Cost: <input type="text" name="cost" size="6">
+  Image Name: <input type="text" name="image" placeholder="Include .jpg" size="15">
+  <input type="submit" name="submit" value="Submit">
+</form>
+
+
+
+<?php
+if(isset($_POST['submit'])){
+        $val = "select max(productId) as newId from Product;";
+        $value = mysqli_query($conn, $val);
+        $temp = mysqli_fetch_assoc($value);
+        $newVal = $temp["newId"]+1;
+        $productAddition = "insert into Product values (".$newVal.", '".$_POST["name"]."', '".$_POST["keywords"]."', NULL, ".$_POST["cost"].", 1, '".$_POST["image"]."');";
+        $foo = mysqli_query($conn, $productAddition);
+        if ($foo){
+                echo "The product has been Added!";
+        }
+}
+?>
         </div>
     </body>
 </html>

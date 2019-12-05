@@ -120,14 +120,24 @@ body {
 
 <div class="topnav">
   <a href=>Toys</a>
-  <select>Search
-  <option default>All Keywords</option>
-  <?php
-    foreach($allkeywords as $keyword){
-      echo "<option>$keyword[0]</option>";
-    }
-  ?>
-  </select>
+ <form action='/Ecommerce-Project/index.html' method='post'><input type="submit" name="logout" value="Log Out" align="right"></input></form> 
+
+<form action='#' method=POST>
+<select name="category">
+<?php
+    foreach($allkeywords as $keyword){?>
+	    <option value="<?php echo $keyword[0];?>"><?php echo $keyword[0];?></option>";
+   <?php }
+?>
+</select>
+<input type="submit" name="submit" value="Submit" />
+</form>
+
+<?php
+if(isset($_POST['submit'])){
+$selected_val = $_POST['category'];  // Storing Selected Value In Variable
+}
+?>
 </div>
 
 <div style="width:700px; margin:50 auto;">

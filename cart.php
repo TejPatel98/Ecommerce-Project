@@ -50,8 +50,7 @@ if (isset($_POST['action']) && $_POST['action']=="change"){
 </head>
 <body>
 <div style="width:700px; margin:50 auto;">
-
-<h2>Demo Shopping Cart</h2>   
+<form action='/Ecommerce-Project/index.html' method='post'><input type="submit" name="logout" value="Log Out"></input></form>
 
 <?php
 if(!empty($_SESSION["shopping_cart"])) {
