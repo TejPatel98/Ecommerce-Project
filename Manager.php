@@ -197,7 +197,7 @@ if(isset($_POST['submit'])){
 <br></br>
 
 
-<h2>View Sales Statistics</h2>
+<h2>Past Sales</h2>
 <?php
 $past = array(-7,-31,-365);
 ?>
@@ -220,7 +220,7 @@ if (in_array($selected_val, $past)){
 	$pastStats_query = "select * from Transaction natural join Cart where TransactionDate >= DATE_ADD(current_date(), interval ".$selected_val." day);";
 	$pastStats = mysqli_query($conn, $pastStats_query);
 	while ($row = mysqli_fetch_array($pastStats)){
-		echo "TransactionId: ".$row['TransactionId']." OrderID: ";
+	echo "<p><b>TransactionId</b>: ".$row['transactionId']."   <b>Customer's username</b>: ".$row['Username']."   <b>ProductId</b>: ".$row['ProductId']."   <b>Bought On</b>: ".$row['TransactionDate']."   <b>Cost</b>: ".$row['cost']."   <b>Quantity</b>: ".$row['quantity']."</p>";
 	}
 }
 }
