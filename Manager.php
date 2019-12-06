@@ -127,6 +127,7 @@
 
         }
 ?>
+<br></br>
 <h2>Pending Orders</h2>
 <form action='' method='post'>
 <input type="submit" name="orders" value="View Pending Orders"/>
@@ -140,7 +141,7 @@
                 }
         }
 ?>
-
+<br></br>
 <h2>Ship Orders</h2>
 <form action='' method='post'>
   Order ID: <input type="text" name="orderID" size="15">
@@ -165,7 +166,7 @@ if(isset($_POST['ship'])){
 
 
 
-
+<br></br>
 
 <h2>Add Inventory Item</h2>
 <form action='' method='post'>
@@ -192,6 +193,41 @@ if(isset($_POST['submit'])){
         }
 }
 ?>
-        </div>
-    </body>
+	</div>
+<br></br>
+
+
+<h2>View Sales Statistics</h2>
+<?php
+$past = array(-7,-31,-365);
+?>
+<form action='#' method=POST>
+<select name="past">
+
+        <option default value="none">None</option>
+	<option value="<?php echo $past[0];?>">Past Week</option>
+	<option value="<?php echo $past[1];?>">Past Month</option>
+	<option value="<?php echo $past[2];?>">Past Year</option>
+</select>
+<input type="submit" name="submit" value="Submit" />
+</form>
+
+<?php
+if(isset($_POST['past'])){
+$selected_val=NULL;
+$selected_val = $_POST['past'];  // Storing Selected Value In Variable
+if (in_array($selected_val, $past)){
+	$pastStats_query = "select * from Transaction natural join Cart where TransactionDate >= DATE_ADD(current_date(), interval ".$selected_val." day);";
+	$pastStats = mysqli_query($conn, $pastStats_query);
+	while ($row = mysqli_fetch_array($pastStats)){
+		echo "TransactionId: ".$row['TransactionId']." OrderID: ";
+	}
+}
+}
+?>
+
+
+
+
+</body>
 </html>
