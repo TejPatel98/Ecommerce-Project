@@ -106,128 +106,145 @@
                                         }
                                     echo "</div>
                                     <div class='modal-footer'>
-                                        <h6>Reload page to view changes.</h6>
-                                        <button type='button' class='btn btn-default' data-dismiss='modal'>Close</button>
+                                        <h6>That's a big sale, chief.</h6>
+                                        <button type='button' class='btn btn-default' data-dismiss='modal' onClick='window.location.reload();'>Close</button>
                                     </div>
-                                </div>";
+                                </div>
+                            </div>
+                            </div>";
                 }
-		?>
-<?php
 
-        if($_SERVER['REQUEST_METHOD'] == "POST" and isset($_POST['update'])){
-
-                $result = mysqli_query($conn, "select * from Product where productId = ".$_POST['productId']."");
-                while($row = mysqli_fetch_assoc($result)) {
-
+                if($_SERVER['REQUEST_METHOD'] == "POST" and isset($_POST['update'])){
+                    $result = mysqli_query($conn, "select * from Product where productId = ".$_POST['productId']."");
+                    while($row = mysqli_fetch_assoc($result)) {
                         $string = $_POST['temp'];
                         $num = (int)$string;
                         $result = mysqli_query($conn, "update Product set quantity = ".$string." where productId = ".$row['productId'].";");
                         $row['quantity']=$num;
+                    }
                 }
-
-        }
-?>
-<br></br>
-<h2>Pending Orders</h2>
-<form action='' method='post'>
-<input type="submit" name="orders" value="View Pending Orders"/>
-</form>
-<?php
-        if($_SERVER['REQUEST_METHOD'] == "POST" and isset($_POST['orders'])){
-        //      $result = mysqli_query($conn, "select * from Cart where orderStatus = 'P'");
-                $result = mysqli_query($conn, "select * from Transaction T natural join Cart C join Product on T.ProductId=Product.productId  where orderStatus='P';");
-                while($row = mysqli_fetch_assoc($result)) {
+            ?>
+        </div>
+        <br>
+        <div class="container">
+            <h5>Pending Orders</h5>
+            <form action='' method='post'>
+                <input type="submit" name="orders" value="Click to View"></input>
+            </form>
+            <?php
+                if($_SERVER['REQUEST_METHOD'] == "POST" and isset($_POST['orders'])){
+                    $result = mysqli_query($conn, "select * from Transaction T natural join Cart C join Product on T.ProductId=Product.productId  where orderStatus='P';");
+                    while($row = mysqli_fetch_assoc($result)) {
                         echo '<p><b>Order ID</b>: '.$row['OrderId'].'   <b>Transaction Date</b>: '.$row['TransactionDate'].'   <b>Customer Id</b>: '.$row["Username"].'   <b>Product Name</b>: '.$row["name"].'   <b>Quantity</b>: '.$row['quantity'].'   <b>Cost</b>: '.$row['cost'].'</p>';
+                    }
                 }
-        }
-?>
-<br></br>
-<h2>Ship Orders</h2>
-<form action='' method='post'>
-  Order ID: <input type="text" name="orderID" size="15">
-  <input type="submit" name="ship" value="Submit">
-</form>
+            ?>
+      
+            <br>
+            <h5>Ship Orders</h5>
+            <form action='' method='post'>
+                Order ID: <input type="text" name="orderID" size="15">
+                <input type="submit" name="ship" value="Submit">
+            </form>
+      
+            <?php
+              if(isset($_POST['submit'])){
+                  $val = "select max(productId) as newId from Product;";
+                  $value = mysqli_query($conn, $val);
+                  $temp = mysqli_fetch_assoc($value);
+                  $newVal = $temp["newId"]+1;
+                  $productAddition = "insert into Product values (".$newVal.", '".$_POST["name"]."', '".$_POST["keywords"]."', NULL, ".$_POST["cost"].", 1, '".$_POST["image"]."');";
+                  $foo = mysqli_query($conn, $productAddition);
+                  if ($foo){
+                      echo "The product has been Added!";
+                  }
+              }
+            ?>
+              
+            <br>
+            <h2>Past Sales</h2>
+            <?php
+                $past = array(-7,-31,-365);
+            ?>
+            <form action='#' method=POST>
+                <select name="past">
+            </form>
+              
+            <?php
+                if(isset($_POST['ship'])){
+                    $bar= "update Cart set orderStatus='S' where orderId=".$_POST["orderID"].";";
+                    $value = mysqli_query($conn, $bar);
+                    $temp = mysqli_fetch_assoc($value);
+                    if ($value){
+                        echo "The product status changed to shipped!";
+                    }
+                }
+              
+                if(isset($_POST['past'])){
+                    $selected_val=NULL;
+                    $selected_val = $_POST['past'];  // Storing Selected Value In Variable
+                    if (in_array($selected_val, $past)){
+                        $pastStats_query = "select * from Transaction natural join Cart where TransactionDate >= DATE_ADD(current_date(), interval ".$selected_val." day);";
+                        $pastStats = mysqli_query($conn, $pastStats_query);
+                        while ($row = mysqli_fetch_array($pastStats)){
+                            echo "<p><b>TransactionId</b>: ".$row['transactionId']."   <b>Customer's username</b>: ".$row['Username']."   <b>ProductId</b>: ".$row['ProductId']."   <b>Bought On</b>: ".$row['TransactionDate']."   <b>Cost</b>: ".$row['cost']."   <b>Quantity</b>: ".$row['quantity']."</p>";
+                        }
+                    }
+                }
+            ?>
 
+            <br>
+            <h5>Add Inventory Item</h5>
+            <form action='' method='post'>
+                Product Name: <input type="text" name="name" size="15">
+                Keyword: <textarea name="keywords" rows="2" columns="10"></textarea>
+                Cost: <input type="text" name="cost" size="6">
+                Image Name: <input type="text" name="image" placeholder="Include .jpg" size="15">
+                <input type="submit" name="submit" value="Submit">
+            </form>
 
+            <?php
+                if(isset($_POST['submit'])){
+                    $val = "select max(productId) as newId from Product;";
+                    $value = mysqli_query($conn, $val);
+                    $temp = mysqli_fetch_assoc($value);
+                    $newVal = $temp["newId"]+1;
+                    $productAddition = "insert into Product values (".$newVal.", '".$_POST["name"]."', '".$_POST["keywords"]."', NULL, ".$_POST["cost"].", 1, '".$_POST["image"]."');";
+                    $foo = mysqli_query($conn, $productAddition);
+                    if ($foo){
+                        echo "The product has been Added!";
+                    }
+                }
+            ?>
 
-<?php
-if(isset($_POST['ship'])){
-        $bar= "update Cart set orderStatus='S' where orderId=".$_POST["orderID"].";";
-        $value = mysqli_query($conn, $bar);
-        $temp = mysqli_fetch_assoc($value);
+            <br>
+            <h5>View Sales Statistics</h5>
+            <?php
+                $past = array(-7,-31,-365);
+            ?>
+            <form action='#' method=POST>
+                <select name="past">
+                    <option default value="none">None</option>
+                    <option value="<?php echo $past[0];?>">Past Week</option>
+                    <option value="<?php echo $past[1];?>">Past Month</option>
+                    <option value="<?php echo $past[2];?>">Past Year</option>
+                </select>
+                <input type="submit" name="submit" value="Submit"></input>
+            </form>
 
-        if ($value){
-                echo "The product status changed to shipped!";
-        }
-}
-?>
-
-
-
-
-
-<br></br>
-
-<h2>Add Inventory Item</h2>
-<form action='' method='post'>
-  Product Name: <input type="text" name="name" size="15">
-  Keyword: <textarea name="keywords" rows="2" columns="10"></textarea>
- <!-- Product Status: <input type="text" name="productStatus" size="1" maxlength="1">-->
-  Cost: <input type="text" name="cost" size="6">
-  Image Name: <input type="text" name="image" placeholder="Include .jpg" size="15">
-  <input type="submit" name="submit" value="Submit">
-</form>
-
-
-
-<?php
-if(isset($_POST['submit'])){
-        $val = "select max(productId) as newId from Product;";
-        $value = mysqli_query($conn, $val);
-        $temp = mysqli_fetch_assoc($value);
-        $newVal = $temp["newId"]+1;
-        $productAddition = "insert into Product values (".$newVal.", '".$_POST["name"]."', '".$_POST["keywords"]."', NULL, ".$_POST["cost"].", 1, '".$_POST["image"]."');";
-        $foo = mysqli_query($conn, $productAddition);
-        if ($foo){
-                echo "The product has been Added!";
-        }
-}
-?>
-	</div>
-<br></br>
-
-
-<h2>Past Sales</h2>
-<?php
-$past = array(-7,-31,-365);
-?>
-<form action='#' method=POST>
-<select name="past">
-
-        <option default value="none">None</option>
-	<option value="<?php echo $past[0];?>">Past Week</option>
-	<option value="<?php echo $past[1];?>">Past Month</option>
-	<option value="<?php echo $past[2];?>">Past Year</option>
-</select>
-<input type="submit" name="submit" value="Submit" />
-</form>
-
-<?php
-if(isset($_POST['past'])){
-$selected_val=NULL;
-$selected_val = $_POST['past'];  // Storing Selected Value In Variable
-if (in_array($selected_val, $past)){
-	$pastStats_query = "select * from Transaction natural join Cart where TransactionDate >= DATE_ADD(current_date(), interval ".$selected_val." day);";
-	$pastStats = mysqli_query($conn, $pastStats_query);
-	while ($row = mysqli_fetch_array($pastStats)){
-	echo "<p><b>TransactionId</b>: ".$row['transactionId']."   <b>Customer's username</b>: ".$row['Username']."   <b>ProductId</b>: ".$row['ProductId']."   <b>Bought On</b>: ".$row['TransactionDate']."   <b>Cost</b>: ".$row['cost']."   <b>Quantity</b>: ".$row['quantity']."</p>";
-	}
-}
-}
-?>
-
-
-
-
-</body>
+            <?php
+                if(isset($_POST['past'])){
+                    $selected_val=NULL;
+                    $selected_val = $_POST['past'];  // Storing Selected Value In Variable
+                    if (in_array($selected_val, $past)){
+                        $pastStats_query = "select * from Transaction natural join Cart where TransactionDate >= DATE_ADD(current_date(), interval ".$selected_val." day);";
+                        $pastStats = mysqli_query($conn, $pastStats_query);
+                        while ($row = mysqli_fetch_array($pastStats)){
+                            echo "TransactionId: ".$row['TransactionId']." OrderID: ";
+                        }
+                    }
+                }
+            ?>
+        </div>
+    </body>
 </html>
