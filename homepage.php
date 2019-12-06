@@ -104,6 +104,9 @@ body {
   border: none;
   font-size: 17px;
 }
+.topnav-right {
+  float: right;
+}
 
 @media screen and (max-width: 600px) {
   .topnav a, .topnav input[type=text] {
@@ -122,12 +125,15 @@ body {
 </style>
 </head>
 <body>
-
 <div class="topnav">
   <a href=>Toys</a>
- <form action='/Ecommerce-Project/index.html' method='post'><input type="submit" name="logout" value="Log Out" align="right"></input></form> 
-
-<form action='#' method=POST>
+  <a class="active" href="http://172.31.148.24/Ecommerce-Project/homepage.php?identification=<?php echo $identification; ?>">Home</a>
+  <a href="http://172.31.148.24/Ecommerce-Project/orderPlaced.php?identification=<?php echo $identification;?>">Order History</a>
+  <div class="topnav-right">
+	<a href="./index.html">Log Out</a> 
+  </div>
+</div>
+<form action='#' method=POST align="right">
 <select name="chosenCategory">
 
 	<option default value="all">All Categories</option>
