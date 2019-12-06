@@ -139,22 +139,56 @@
                     }
                 }
             ?>
-
+      
             <br>
             <h5>Ship Orders</h5>
             <form action='' method='post'>
                 Order ID: <input type="text" name="orderID" size="15">
                 <input type="submit" name="ship" value="Submit">
             </form>
-
+      
+            <?php
+              if(isset($_POST['submit'])){
+                  $val = "select max(productId) as newId from Product;";
+                  $value = mysqli_query($conn, $val);
+                  $temp = mysqli_fetch_assoc($value);
+                  $newVal = $temp["newId"]+1;
+                  $productAddition = "insert into Product values (".$newVal.", '".$_POST["name"]."', '".$_POST["keywords"]."', NULL, ".$_POST["cost"].", 1, '".$_POST["image"]."');";
+                  $foo = mysqli_query($conn, $productAddition);
+                  if ($foo){
+                      echo "The product has been Added!";
+                  }
+              }
+            ?>
+              
+            <br>
+            <h2>Past Sales</h2>
+            <?php
+                $past = array(-7,-31,-365);
+            ?>
+            <form action='#' method=POST>
+                <select name="past">
+            </form>
+              
             <?php
                 if(isset($_POST['ship'])){
                     $bar= "update Cart set orderStatus='S' where orderId=".$_POST["orderID"].";";
                     $value = mysqli_query($conn, $bar);
                     $temp = mysqli_fetch_assoc($value);
-
                     if ($value){
                         echo "The product status changed to shipped!";
+                    }
+                }
+              
+                if(isset($_POST['past'])){
+                    $selected_val=NULL;
+                    $selected_val = $_POST['past'];  // Storing Selected Value In Variable
+                    if (in_array($selected_val, $past)){
+                        $pastStats_query = "select * from Transaction natural join Cart where TransactionDate >= DATE_ADD(current_date(), interval ".$selected_val." day);";
+                        $pastStats = mysqli_query($conn, $pastStats_query);
+                        while ($row = mysqli_fetch_array($pastStats)){
+                            echo "<p><b>TransactionId</b>: ".$row['transactionId']."   <b>Customer's username</b>: ".$row['Username']."   <b>ProductId</b>: ".$row['ProductId']."   <b>Bought On</b>: ".$row['TransactionDate']."   <b>Cost</b>: ".$row['cost']."   <b>Quantity</b>: ".$row['quantity']."</p>";
+                        }
                     }
                 }
             ?>
