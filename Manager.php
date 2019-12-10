@@ -14,7 +14,132 @@
 	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-    </head>
+	<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    	<script type="text/javascript">
+
+      // Load the Visualization API and the corechart package.
+      google.charts.load('current', {'packages':['corechart']});
+
+      // Set a callback to run when the Google Visualization API is loaded.
+      google.charts.setOnLoadCallback(drawChart);
+
+      // Callback that creates and populates a data table,
+      // instantiates the pie chart, passes in the data and
+      // draws it.
+      function drawChart() {
+
+        // Create the data table.
+        var data = new google.visualization.DataTable();
+        data.addColumn('string', 'Topping');
+        data.addColumn('number', 'Slices');
+	
+<?php
+
+	$result_query = "select * from (select distinct ProductId, sum(quantity) as j1 from Transaction natural join Cart where TransactionDate >= DATE_ADD(current_date(), interval -7 day) group by ProductId) as t1 join Product on t1.ProductId = Product.productId;";
+	$result = mysqli_query($conn, $result_query);
+	$dat = array();
+	while($row = mysqli_fetch_assoc($result)){
+		$dat[] = array($row['name'], intval($row['j1']));
+	}
+	echo "var temp = ".json_encode($dat).";";	
+?>	
+	console.log(temp);
+	
+	
+	data.addRows(temp);
+
+        // Set chart options
+        var options = {'title':'How Much Pizza I Ate Last Night',
+                       'width':400,
+                       'height':300};
+
+        // Instantiate and draw our chart, passing in some options.
+        var chart = new google.visualization.PieChart(document.getElementById('chart_div'));
+        chart.draw(data, options);
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+// --------
+      
+        var data1 = new google.visualization.DataTable();
+        data1.addColumn('string', 'Topping');
+        data1.addColumn('number', 'Slices');
+	
+<?php
+
+	$result_query = "select * from (select distinct ProductId, sum(quantity) as j1 from Transaction natural join Cart where TransactionDate >= DATE_ADD(current_date(), interval -30 day) group by ProductId) as t1 join Product on t1.ProductId = Product.productId;";
+	$result = mysqli_query($conn, $result_query);
+	$dat1 = array();
+	while($row = mysqli_fetch_assoc($result)){
+		$dat1[] = array($row['name'], intval($row['j1']));
+	}
+	echo "var temp1 = ".json_encode($dat).";";	
+?>	
+	console.log(temp1);
+	
+	
+	data1.addRows(temp1);
+
+        // Set chart options
+        var options = {'title':'How Much Pizza I Ate Last Night',
+                       'width':400,
+                       'height':300};
+
+        // Instantiate and draw our chart, passing in some options.
+        var chart = new google.visualization.PieChart(document.getElementById('chart_div1'));
+        chart.draw(data1, options);
+      
+
+
+// ------------
+
+
+
+
+      
+        var data2 = new google.visualization.DataTable();
+        data2.addColumn('string', 'Topping');
+        data2.addColumn('number', 'Slices');
+	
+<?php
+
+	$result_query = "select * from (select distinct ProductId, sum(quantity) as j1 from Transaction natural join Cart where TransactionDate >= DATE_ADD(current_date(), interval -365 day) group by ProductId) as t1 join Product on t1.ProductId = Product.productId;";
+	$result = mysqli_query($conn, $result_query);
+	$dat2 = array();
+	while($row = mysqli_fetch_assoc($result)){
+		$dat2[] = array($row['name'], intval($row['j1']));
+	}
+	echo "var temp2 = ".json_encode($dat2).";";	
+?>	
+	console.log(temp2);
+	
+	
+	data2.addRows(temp2);
+
+        // Set chart options
+        var options = {'title':'How Much Pizza I Ate Last Night',
+                       'width':400,
+                       'height':300};
+
+        // Instantiate and draw our chart, passing in some options.
+        var chart = new google.visualization.PieChart(document.getElementById('chart_div2'));
+	chart.draw(data2, options);
+
+      
+      }
+
+    </script>    
+</head>
     <body>
         <div class="container">
             <br>
@@ -308,6 +433,10 @@ if (in_array($selected_val, $past)){
 		$data[] = $temp;
 	}
 ?>
+<div id="chart_div"></div>
+<div id="chart_div1"></div>
+<div id="chart_div2"></div>
+
 	<br />  
                 <form method="post" action="" align="center">  
                      <input type="submit" name="exportChosen" value="CSV Export for the chosen time frame" class="btn btn-success" />  
@@ -330,14 +459,10 @@ if (in_array($selected_val, $past)){
 		echo "helloo";
 	}  
 ?>
-<div id="chartContainer" style="height: 370px; width: 100%;"></div>
-<script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
 <?php
 }
 }
 ?>
-
-
 
 
 </body>

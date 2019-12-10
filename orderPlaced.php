@@ -90,7 +90,9 @@ body {
 <form action = ""  method = "post">
 <input type="submit" name="History" value="History"/>
 <input type="submit" name="LogOut" value="LogOut"/>
-<input type="submit" name="Cancel" value="Cancel Previous Order/s"/>
+<input type="submit" name="Cancel" value="Orders that could be cancelled"/>
+  Order ID To be cancelled: <input type="text" name="orderID" size="15"/>
+<input type="submit" name"cancelOrder" value="cancelOrder"/>
 </form>
 
 <h3>Username - <?php echo $identification; ?></h3>
@@ -145,28 +147,31 @@ elseif(isset($_POST['Cancel'])){
 			<td>'.$row['quantity'].'</td> 
                 	<td>'.$row['cost']*$row['quantity'].'</td> 
 			<td>'.$os.'</td> 
+			<td><input type=\"submit\" name=\"cancel\" value=\"'.$row['id'].'\"</a></td>
 		</tr>';
 	
-	}?>
-<p></p>
-<form action='' method='post'>
-  Order ID To be cancelled: <input type="text" name="orderID" size="15">
-</form>	
-
-<?php
-	if(isset($_POST['cancel'])){
-		echo "got in";
-	/*$bar = "SET FOREIGN_KEY_CHECKS = 0; delete from Cart where orderId=".$_POST['orderID'].";  delete from Transaction where OrderId=".$_POST['orderID']."; SET FOREIGN_KEY_CHECKS = 1;";
-	echo $bar;	
+	}
+}
+elseif(isset($_POST['cancelOrder'])){
+	$val=intval($_POST['orderID']);
+	$bar="SET FOREIGN_KEY_CHECKS = 0;";
+	$bar1="delete from Cart where orderId=".$val.";";
+	$bar2="delete from Transaction where OrderId=".$val.";";
+       	$bar3="SET FOREIGN_KEY_CHECKS = 1;";
 	$value = mysqli_query($conn, $bar);
-        $temp = mysqli_fetch_assoc($value);
+	$value1 = mysqli_query($conn, $bar1);
+	$value2 = mysqli_query($conn, $bar2);
+	$value3 = mysqli_query($conn, $bar3);
 
-        if ($value){
+        if ($value and $value1 and $value2 and $value3){
                 echo "Your Order has been Cancelled!";
-	}*/
 	}
+	else{
+		echo "didnt get in";
+	}
+}
 
-	}
+	
 
 elseif(isset($_POST['LogOut'])){
 //	echo "you chose to Log Out";
