@@ -148,21 +148,22 @@ elseif(isset($_POST['Cancel'])){
 		</tr>';
 	
 	}?>
+<p></p>
 <form action='' method='post'>
   Order ID To be cancelled: <input type="text" name="orderID" size="15">
-  <input type="submit" name="cancel" value="Submit">
 </form>	
 
 <?php
 	if(isset($_POST['cancel'])){
-	echo "got in";
-	$bar = "SET FOREIGN_KEY_CHECKS = 0; delete from Cart where orderId=".$_POST['orderID'].";  delete from Transaction where OrderId=".$_POST['orderID']."; SET FOREIGN_KEY_CHECKS = 1;"	
+		echo "got in";
+	/*$bar = "SET FOREIGN_KEY_CHECKS = 0; delete from Cart where orderId=".$_POST['orderID'].";  delete from Transaction where OrderId=".$_POST['orderID']."; SET FOREIGN_KEY_CHECKS = 1;";
+	echo $bar;	
 	$value = mysqli_query($conn, $bar);
         $temp = mysqli_fetch_assoc($value);
 
         if ($value){
                 echo "Your Order has been Cancelled!";
-        }
+	}*/
 	}
 
 	}

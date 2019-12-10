@@ -8,40 +8,12 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-        <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+           <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>  
+           <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" />  
+           <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>   
+	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-<script>
-window.onload = function () {
-
-var chart = new CanvasJS.Chart("chartContainer", {
-        animationEnabled: true,
-        exportEnabled: true,
-        theme: "dark1",
-        title:{
-        text: "Number of products sold in the past "
-<?php
-        if ($selected_val == -7)
-                echo "week";
-        elseif ($selected_val == -30)
-                echo "month";
-        elseif ($selected_val == -365)
-                echo "year";
-?>
-        },
-        data: [{
-                type: "bar",
-                indexLabel: "{y}",
-                indexLabelFontColor: "#5A5757",
-                indexLabelPlacement: "outside",
-                dataPoints: <?php echo json_encode($data, JSON_NUMERIC_CHECK); ?>
-        }]
-});
-chart.render();
-
-}
-</script>
-
     </head>
     <body>
         <div class="container">
@@ -53,7 +25,62 @@ chart.render();
                 ?>
             </h2>
             <p>View and update inventory, ship pending orders, and view sales statistics and promotions below.</p>
-            <h5>Inventory</h5>
+	<br />  
+                <form method="post" action="" align="center">  
+                     <input type="submit" name="exportAll" value="CSV Export all data" class="btn btn-success" />  
+                </form>  
+         <br />    
+<?php
+		    if($_SERVER['REQUEST_METHOD'] == "POST" and isset($_POST["exportAll"])){
+			      $output = fopen("data.csv", "w");  
+			      fputcsv($output, array('Username', 'OrderId', 'TransactionId', 'ProductId', 'quantity', 'OrderStatus'));  
+			      $query="select Username, OrderId, transactionId, ProductId, quantity, orderStatus from Transaction natural join Cart;";
+			      $result = mysqli_query($conn, $query);  
+			      while($row = mysqli_fetch_assoc($result))  
+			      {  
+				   fputcsv($output, $row);  
+			      }  
+			      fclose($output);
+			      header('Content-Type: text/csv; charset=utf-8');  
+			      header('Content-Disposition: attachment; filename=data.csv');  
+		    }
+/*
+	if($_SERVER['REQUEST_METHOD'] == "POST" and isset($_POST["exportAll"])){
+		    $query=mysqli_query($conn,"select Username, OrderId, transactionId, ProductId, quantity, orderStatus from Transaction natural join Cart;");
+		    $delimiter = ",";
+		    $filename = "data_" . date('Y-m-d') . ".csv";
+
+		    //create a file pointer
+		    $f = fopen('php://memory', 'w');
+
+		    //set column headers
+		    $fields = array('Username', 'OrderId', 'TransactionId', 'ProductId', 'quantity', 'OrderStatus');
+		    fputcsv($f, $fields, $delimiter);
+		
+		    //output each row of the data, format line as csv and write to file pointer
+		    while($row = mysqli_fetch_assoc($query)){
+			$lineData = array($row['Username'], $row['OrderId'], $row['transactionId'], $row['ProductId'], $row['quantity'], $row['orderStatus']);
+			fputcsv($f, $lineData, $delimiter);
+		    }
+
+		    //move back to beginning of file
+		    fseek($f, 0);
+
+		    //set headers to download file rather than displayed
+		    header('Content-Type: text/csv');
+		    header('Content-Disposition: attachment; filename="' . $filename . '";');
+
+		    //output all remaining data on a file pointer
+		    fpassthru($f);
+	}*/
+
+?>
+	 
+
+
+
+
+	<h5>Inventory</h5>
             <form method="POST">       
                 <table class="table table-dark">
                     <thead>
@@ -280,6 +307,28 @@ if (in_array($selected_val, $past)){
                 $temp["y"] = $row['j1'];
 		$data[] = $temp;
 	}
+?>
+	<br />  
+                <form method="post" action="" align="center">  
+                     <input type="submit" name="exportChosen" value="CSV Export for the chosen time frame" class="btn btn-success" />  
+                </form>  
+         <br />    
+<?php
+	if($_SERVER['REQUEST_METHOD'] == "POST" and isset($_POST["exportChosen"]))  
+	 {  
+	   /*   header('Content-Type: text/csv; charset=utf-8');  
+	      header('Content-Disposition: attachment; filename=data.csv');  
+	      $output = fopen("php://output", "w");  
+	      fputcsv($output, array('Username', 'OrderId', 'TransactionId', 'ProductId', 'quantity', 'OrderStatus'));  
+	      $query = "select Username, OrderId, transactionId, ProductId, quantity, orderStatus from Transaction natural join Cart where TransactionDate >= DATE_ADD(current_date(), interval ".$selected_val." day);";  
+	      $result = mysqli_query($conn, $query);  
+	      while($row = mysqli_fetch_assoc($result))  
+	      {  
+		   fputcsv($output, $row);  
+	      }  
+	      fclose($output);*/  
+		echo "helloo";
+	}  
 ?>
 <div id="chartContainer" style="height: 370px; width: 100%;"></div>
 <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
