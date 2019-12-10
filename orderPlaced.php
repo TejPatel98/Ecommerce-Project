@@ -90,15 +90,16 @@ body {
 <form action = ""  method = "post">
 <input type="submit" name="History" value="History"/>
 <input type="submit" name="LogOut" value="LogOut"/>
+<input type="submit" name="Cancel" value="Cancel Previous Order/s"/>
 </form>
+
+<h3>Username - <?php echo $identification; ?></h3>
+
 <?php
 
 if(isset($_POST['History'])){
-//	echo "you chose History";
 	$history = "select * from Transaction T natural join Product P join Cart on T.OrderId=Cart.OrderId where T.Username='".$identification."';";
-//		echo $history;
 	$result = mysqli_query($conn, $history);
-	echo "\n User Name = ".$identification;
 	echo '<table border="0" cellspacing="2" cellpadding="2"> 
       <tr> 
           <td> <font face="Arial">Order Id</font> </td> 
@@ -121,7 +122,51 @@ if(isset($_POST['History'])){
 		</tr>';
 	
 	}
+	echo "<p></p>";
 }
+elseif(isset($_POST['Cancel'])){
+	echo "You can cancel any of the follwowing orders, just type in the order Id an hit \"submit\"";
+	$one_day_sql="select * from Cart natural join Transaction where Username='".$identification."' and TransactionDate >= DATE_ADD(current_date(), interval -1 day);";
+	$result = mysqli_query($conn, $one_day_sql);
+	echo '<table border="0" cellspacing="2" cellpadding="2"> 
+      <tr> 
+          <td> <font face="Arial">Order Id</font> </td> 
+	  <td> <font face="Arial">Quantity</font> </td> 
+          <td> <font face="Arial">Total Cost</font> </td> 
+          <td> <font face="Arial">Status</font> </td> 
+      </tr>';
+
+
+	while ($row = mysqli_fetch_assoc($result)) {
+		if ($row['orderStatus'] == "P") { $os = "Placed";} 
+		else if ($row['orderStatus'] == "S"){ $os = "Shipped";}
+		echo '<tr> 
+			<td>'.$row['orderId'].'</td> 
+			<td>'.$row['quantity'].'</td> 
+                	<td>'.$row['cost']*$row['quantity'].'</td> 
+			<td>'.$os.'</td> 
+		</tr>';
+	
+	}?>
+<form action='' method='post'>
+  Order ID To be cancelled: <input type="text" name="orderID" size="15">
+  <input type="submit" name="cancel" value="Submit">
+</form>	
+
+<?php
+	if(isset($_POST['cancel'])){
+	echo "got in";
+	$bar = "SET FOREIGN_KEY_CHECKS = 0; delete from Cart where orderId=".$_POST['orderID'].";  delete from Transaction where OrderId=".$_POST['orderID']."; SET FOREIGN_KEY_CHECKS = 1;"	
+	$value = mysqli_query($conn, $bar);
+        $temp = mysqli_fetch_assoc($value);
+
+        if ($value){
+                echo "Your Order has been Cancelled!";
+        }
+	}
+
+	}
+
 elseif(isset($_POST['LogOut'])){
 //	echo "you chose to Log Out";
 	header("Location: http://172.31.148.24/Ecommerce-Project/index.html");
