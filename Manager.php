@@ -222,7 +222,26 @@ if (in_array($selected_val, $past)){
 	while ($row = mysqli_fetch_array($pastStats)){
 	echo "<p><b>TransactionId</b>: ".$row['transactionId']."   <b>Customer's username</b>: ".$row['Username']."   <b>ProductId</b>: ".$row['ProductId']."   <b>Bought On</b>: ".$row['TransactionDate']."   <b>Cost</b>: ".$row['cost']."   <b>Quantity</b>: ".$row['quantity']."</p>";
 	}
-}
+	$sql_most_sale = "select max(t1.j1) from (select distinct ProductId, sum(quantity) as j1 from Transaction natural join Cart where TransactionDate >= DATE_ADD(current_date(), interval ".$selected_val." day) group by ProductId) as t1;";
+	$temp = mysqli_query($conn, $sql_most_sale);
+	$foo = mysqli_fetch_assoc($temp)['max(t1.j1)'];
+	$most_sold_product_sql = "select * from (select t1.ProductId from (select distinct ProductId, sum(quantity) as j1 from Transaction natural join Cart where TransactionDate >= DATE_ADD(current_date(), interval ".$selected_val." day) group by ProductId) as t1 where t1.j1=".$foo.") as t2 join Product on Product.productId=t2.ProductId;";
+	$most_sold_product = mysqli_query($conn, $most_sold_product_sql);
+	echo "<h3> Most popular product/s </h3>";
+	while ($row = mysqli_fetch_assoc($most_sold_product)){
+		echo "<p><b>Product Id</b>: ".$row['productId']." , <b>Product Name</b>: ".$row['name']." , <b>Cost</b>: ".$row['cost'].", <b>Total Number of Orders</b>: ".$foo."</p>";
+	}
+	$most_number_of_transactions="select max(t1.j1) from (select Username, count(Username) as j1 from Transaction natural join Cart where TransactionDate >= DATE_ADD(current_date(), interval ".$selected_val." day) group by Username) as t1;";
+	$temp2=mysqli_query($conn, $most_number_of_transactions);
+	$bar=mysqli_fetch_assoc($temp2)['max(t1.j1)'];
+	$individual_with_most_transactions_sql="select * from (select Username from (select Username, count(Username) as j1 from Transaction natural join Cart where TransactionDate >= DATE_ADD(current_date(), interval ".$selected_val." day) group by Username) as t1 where t1.j1 = ".$bar.") as t2 join Individual on t2.Username=Individual.username;";
+	$individual_with_most_transactions=mysqli_query($conn, $individual_with_most_transactions_sql);
+	echo "<h3> Individual/s with most transactions </h3>";
+	while ($row = mysqli_fetch_assoc($individual_with_most_transactions)){
+		echo "<p> <b>Customer Id</b>: ".$row['individualId']." , <b>Username</b>: ".$row['username']." , <b>Email Address</b>: ".$row['email']."</p>";
+	}
+	
+}	
 }
 ?>
 
