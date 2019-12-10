@@ -10,7 +10,38 @@
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
         <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+<script>
+window.onload = function () {
+
+var chart = new CanvasJS.Chart("chartContainer", {
+        animationEnabled: true,
+        exportEnabled: true,
+        theme: "dark1",
+        title:{
+        text: "Number of products sold in the past "
+<?php
+        if ($selected_val == -7)
+                echo "week";
+        elseif ($selected_val == -30)
+                echo "month";
+        elseif ($selected_val == -365)
+                echo "year";
+?>
+        },
+        data: [{
+                type: "bar",
+                indexLabel: "{y}",
+                indexLabelFontColor: "#5A5757",
+                indexLabelPlacement: "outside",
+                dataPoints: <?php echo json_encode($data, JSON_NUMERIC_CHECK); ?>
+        }]
+});
+chart.render();
+
+}
+</script>
+
     </head>
     <body>
         <div class="container">
@@ -240,8 +271,20 @@ if (in_array($selected_val, $past)){
 	while ($row = mysqli_fetch_assoc($individual_with_most_transactions)){
 		echo "<p> <b>Customer Id</b>: ".$row['individualId']." , <b>Username</b>: ".$row['username']." , <b>Email Address</b>: ".$row['email']."</p>";
 	}
-	
-}	
+	$data = array();
+        $data_sql = "select * from (select distinct ProductId, sum(quantity) as j1 from Transaction natural join Cart where TransactionDate >= DATE_ADD(current_date(), interval ".$selected_val." day) group by ProductId) as t1 join Product on t1.ProductId = Product.productId;";
+        $get_data = mysqli_query($conn, $data_sql);
+        while ($row = mysqli_fetch_assoc($get_data)){
+                $temp = array();
+                $temp["x"] = $row['name'];
+                $temp["y"] = $row['j1'];
+		$data[] = $temp;
+	}
+?>
+<div id="chartContainer" style="height: 370px; width: 100%;"></div>
+<script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+<?php
+}
 }
 ?>
 
