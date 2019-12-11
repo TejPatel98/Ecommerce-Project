@@ -8,7 +8,8 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-           <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>  
+<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">	   
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>  
            <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" />  
            <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>   
 	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
@@ -49,7 +50,7 @@
 	data.addRows(temp);
 
         // Set chart options
-        var options = {'title':'How Much Pizza I Ate Last Night',
+        var options = {'title':'Products sold in the last week',
                        'width':400,
                        'height':300};
 
@@ -57,20 +58,8 @@
         var chart = new google.visualization.PieChart(document.getElementById('chart_div'));
         chart.draw(data, options);
       
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-// --------
-      
+// ------
+ 
         var data1 = new google.visualization.DataTable();
         data1.addColumn('string', 'Topping');
         data1.addColumn('number', 'Slices');
@@ -91,7 +80,7 @@
 	data1.addRows(temp1);
 
         // Set chart options
-        var options = {'title':'How Much Pizza I Ate Last Night',
+        var options = {'title':'Products sold in the last month',
                        'width':400,
                        'height':300};
 
@@ -104,9 +93,6 @@
 // ------------
 
 
-
-
-      
         var data2 = new google.visualization.DataTable();
         data2.addColumn('string', 'Topping');
         data2.addColumn('number', 'Slices');
@@ -127,7 +113,7 @@
 	data2.addRows(temp2);
 
         // Set chart options
-        var options = {'title':'How Much Pizza I Ate Last Night',
+        var options = {'title':'products sold in the last year',
                        'width':400,
                        'height':300};
 
@@ -152,11 +138,38 @@
             <p>View and update inventory, ship pending orders, and view sales statistics and promotions below.</p>
 	<br />  
                 <form method="post" action="" align="center">  
-                     <input type="submit" name="exportAll" value="CSV Export all data" class="btn btn-success" />  
+		     <a href="export.php" type="submit" name="exportAll" value="CSV Export all data" align="center" class="btn btn-success pull-right" />Download All Data</a>
+			
                 </form>  
          <br />    
 <?php
-		    if($_SERVER['REQUEST_METHOD'] == "POST" and isset($_POST["exportAll"])){
+/*	if (isset($_POST['exportAll'])) {
+		$result = mysqli_query($conn, "select Username, OrderId, transactionId, ProductId, quantity, orderStatus from Transaction natural join Cart;");
+		$delim = ",";
+		$filename = "data.csv";		
+		$f = fopen('php://output', 'w');
+		$fields = array('Username', 'OrderId', 'transactionId', 'ProductId', 'quantity');
+		fputcsv($f, $fields, $delim);
+
+		while ($row = mysqli_fetch_assoc($result)){
+			$line = array($row['Username'], $row['OrderId'], $row['transactionId'], $row['ProductId'], $row['line']);
+			fputcsv($f, $line, $delim);
+		}
+		
+		fseek($f, 0);
+		header('Content-Type: text/csv');
+		header('Content-Disposition: attachment; filename="'.$filename.'";');
+	}	
+ */
+
+
+
+
+
+
+
+
+/*   if($_SERVER['REQUEST_METHOD'] == "POST" and isset($_POST["exportAll"])){
 			      $output = fopen("data.csv", "w");  
 			      fputcsv($output, array('Username', 'OrderId', 'TransactionId', 'ProductId', 'quantity', 'OrderStatus'));  
 			      $query="select Username, OrderId, transactionId, ProductId, quantity, orderStatus from Transaction natural join Cart;";
@@ -169,8 +182,8 @@
 			      header('Content-Type: text/csv; charset=utf-8');  
 			      header('Content-Disposition: attachment; filename=data.csv');  
 		    }
-/*
-	if($_SERVER['REQUEST_METHOD'] == "POST" and isset($_POST["exportAll"])){
+		    
+		 if($_SERVER['REQUEST_METHOD'] == "POST" and isset($_POST["exportAll"])){
 		    $query=mysqli_query($conn,"select Username, OrderId, transactionId, ProductId, quantity, orderStatus from Transaction natural join Cart;");
 		    $delimiter = ",";
 		    $filename = "data_" . date('Y-m-d') . ".csv";
@@ -205,7 +218,7 @@
 
 
 
-	<h5>Inventory</h5>
+	<h3>Inventory</h3>
             <form method="POST">       
                 <table class="table table-dark">
                     <thead>

@@ -142,14 +142,21 @@ elseif(isset($_POST['Cancel'])){
 	while ($row = mysqli_fetch_assoc($result)) {
 		if ($row['orderStatus'] == "P") { $os = "Placed";} 
 		else if ($row['orderStatus'] == "S"){ $os = "Shipped";}
-		echo '<tr> 
-			<td>'.$row['orderId'].'</td> 
-			<td>'.$row['quantity'].'</td> 
-                	<td>'.$row['cost']*$row['quantity'].'</td> 
-			<td>'.$os.'</td> 
-			<td><input type=\"submit\" name=\"cancel\" value=\"'.$row['id'].'\"</a></td>
-		</tr>';
-	
+?>
+		<tr> 
+		<td><?php echo $row['orderId'];?></td> 
+			<td><?php echo $row['quantity'];?></td> 
+                	<td><?php echo $row['cost'] * $row['quantity'];?></td> 
+			<td><?php echo $os;?></td> 
+			<td><input type="submit" class = 'btn' name="cancelOrder"  value="cancelOrder" id="<?php echo $row['id'];?>"</td>
+		</tr>;
+<?php	
+	}
+
+	if(isset($_POST['cancelOrder'])){
+		$orderid = $_GET['id'];
+		echo "got it".$orderid;
+		
 	}
 }
 elseif(isset($_POST['cancelOrder'])){
