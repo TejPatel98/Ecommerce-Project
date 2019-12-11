@@ -91,8 +91,6 @@ body {
 <input type="submit" name="History" value="History"/>
 <input type="submit" name="LogOut" value="LogOut"/>
 <input type="submit" name="Cancel" value="Orders that could be cancelled"/>
-  Order ID To be cancelled: <input type="text" name="orderID" size="15"/>
-<input type="submit" name"cancelOrder" value="cancelOrder"/>
 </form>
 
 <h3>Username - <?php echo $identification; ?></h3>
@@ -124,10 +122,8 @@ if(isset($_POST['History'])){
 		</tr>';
 	
 	}
-	echo "<p></p>";
 }
 elseif(isset($_POST['Cancel'])){
-	echo "You can cancel any of the follwowing orders, just type in the order Id an hit \"submit\"";
 	$one_day_sql="select * from Cart natural join Transaction where Username='".$identification."' and TransactionDate >= DATE_ADD(current_date(), interval -1 day);";
 	$result = mysqli_query($conn, $one_day_sql);
 	echo '<table border="0" cellspacing="2" cellpadding="2"> 
@@ -148,37 +144,12 @@ elseif(isset($_POST['Cancel'])){
 			<td><?php echo $row['quantity'];?></td> 
                 	<td><?php echo $row['cost'] * $row['quantity'];?></td> 
 			<td><?php echo $os;?></td> 
-			<td><input type="submit" class = 'btn' name="cancelOrder"  value="cancelOrder" id="<?php echo $row['id'];?>"</td>
+			<td><a href='delete.php?id="<?php echo $row['orderId'];?>"?identification="<?php echo $identification;?>"'>Cancel</a></td>
 		</tr>;
 <?php	
 	}
 
-	if(isset($_POST['cancelOrder'])){
-		$orderid = $_GET['id'];
-		echo "got it".$orderid;
-		
-	}
 }
-elseif(isset($_POST['cancelOrder'])){
-	$val=intval($_POST['orderID']);
-	$bar="SET FOREIGN_KEY_CHECKS = 0;";
-	$bar1="delete from Cart where orderId=".$val.";";
-	$bar2="delete from Transaction where OrderId=".$val.";";
-       	$bar3="SET FOREIGN_KEY_CHECKS = 1;";
-	$value = mysqli_query($conn, $bar);
-	$value1 = mysqli_query($conn, $bar1);
-	$value2 = mysqli_query($conn, $bar2);
-	$value3 = mysqli_query($conn, $bar3);
-
-        if ($value and $value1 and $value2 and $value3){
-                echo "Your Order has been Cancelled!";
-	}
-	else{
-		echo "didnt get in";
-	}
-}
-
-	
 
 elseif(isset($_POST['LogOut'])){
 //	echo "you chose to Log Out";
