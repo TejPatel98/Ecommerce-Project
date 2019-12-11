@@ -89,7 +89,6 @@ body {
 	 height="200" align="middle">
 <form action = ""  method = "post">
 <input type="submit" name="History" value="History"/>
-<input type="submit" name="LogOut" value="LogOut"/>
 <input type="submit" name="Cancel" value="Orders that could be cancelled"/>
 </form>
 
@@ -100,7 +99,7 @@ body {
 if(isset($_POST['History'])){
 	$history = "select * from Transaction T natural join Product P join Cart on T.OrderId=Cart.OrderId where T.Username='".$identification."';";
 	$result = mysqli_query($conn, $history);
-	echo '<table border="0" cellspacing="2" cellpadding="2"> 
+	echo '<table border="1" cellspacing="1" cellpadding="4"> 
       <tr> 
           <td> <font face="Arial">Order Id</font> </td> 
           <td> <font face="Arial">Name of the Product</font> </td> 
@@ -124,11 +123,12 @@ if(isset($_POST['History'])){
 	}
 }
 elseif(isset($_POST['Cancel'])){
-	$one_day_sql="select * from Cart natural join Transaction where Username='".$identification."' and TransactionDate >= DATE_ADD(current_date(), interval -1 day);";
+	$one_day_sql="select * from Transaction natural join Cart join Product on Transaction.ProductId=Product.productId where Transaction.Username='".$identification."' and Transaction.TransactionDate >= DATE_ADD(current_date(), interval -1 day);";
 	$result = mysqli_query($conn, $one_day_sql);
-	echo '<table border="0" cellspacing="2" cellpadding="2"> 
+	echo '<table border="1" cellspacing="1" cellpadding="4"> 
       <tr> 
           <td> <font face="Arial">Order Id</font> </td> 
+	  <td> <font face="Arial">Product Name</font> </td> 
 	  <td> <font face="Arial">Quantity</font> </td> 
           <td> <font face="Arial">Total Cost</font> </td> 
           <td> <font face="Arial">Status</font> </td> 
@@ -140,23 +140,17 @@ elseif(isset($_POST['Cancel'])){
 		else if ($row['orderStatus'] == "S"){ $os = "Shipped";}
 ?>
 		<tr> 
-		<td><?php echo $row['orderId'];?></td> 
+		<td><?php echo $row['OrderId'];?></td> 
+			<td><?php echo $row['name'];?></td> 
 			<td><?php echo $row['quantity'];?></td> 
                 	<td><?php echo $row['cost'] * $row['quantity'];?></td> 
 			<td><?php echo $os;?></td> 
 			<td><a href='delete.php?id="<?php echo $row['orderId'];?>"?identification="<?php echo $identification;?>"'>Cancel</a></td>
-		</tr>;
+		</tr>
 <?php	
 	}
 
 }
-
-elseif(isset($_POST['LogOut'])){
-//	echo "you chose to Log Out";
-	header("Location: http://172.31.148.24/Ecommerce-Project/index.html");
-	exit();
-}
-
 
 ?>
 

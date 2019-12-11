@@ -72,7 +72,7 @@
 	while($row = mysqli_fetch_assoc($result)){
 		$dat1[] = array($row['name'], intval($row['j1']));
 	}
-	echo "var temp1 = ".json_encode($dat).";";	
+	echo "var temp1 = ".json_encode($dat1).";";	
 ?>	
 	console.log(temp1);
 	
@@ -113,7 +113,7 @@
 	data2.addRows(temp2);
 
         // Set chart options
-        var options = {'title':'products sold in the last year',
+        var options = {'title':'Products sold in the last year',
                        'width':400,
                        'height':300};
 
@@ -285,57 +285,24 @@
                         $cost_query = "UPDATE Product SET cost=$new_cost WHERE productId=$product_id";
                         if ($conn->query($cost_query) != TRUE){
                             echo "Cost update failed: ". $conn->error;
-                        }
-                    }
+			}
+			header("Refresh:0");
+		}
 
-                    echo "<br>
-                        <button class='btn btn-default' data-toggle='modal' data-target='#promoModal'>Click to View Updates</button>
-                            <div id='promoModal' class='modal' role='dialog'>
-                            <div class='modal-dialog'>
-                                <div class='modal-content'>
-                                    <div class='modal-header'>
-                                        <h5 class='modal-title'>Price after Promotions</h5>
-                                        <button type='button' class='close' data-dismiss='modal'>&times;</button>
-                                    </div>
-                                    <div class='modal-body'>";
-                                        for ($i = 0; $i < count($product_names); $i++){
-                                            echo $product_names[$i] . " price: $" . $new_costs[$i];
-                                            echo "<br>";
-                                        }
-                                    echo "</div>
-                                    <div class='modal-footer'>
-                                        <h6>Reload page to view changes.</h6>
-                                        <button type='button' class='btn btn-default' data-dismiss='modal'>Close</button>
-                                    </div>
-                                </div>";
                 }
 		?>
-<?php
-
-        if($_SERVER['REQUEST_METHOD'] == "POST" and isset($_POST['update'])){
-
-                $result = mysqli_query($conn, "select * from Product where productId = ".$_POST['productId']."");
-                while($row = mysqli_fetch_assoc($result)) {
-
-                        $string = $_POST['temp'];
-                        $num = (int)$string;
-                        $result = mysqli_query($conn, "update Product set quantity = ".$string." where productId = ".$row['productId'].";");
-                        $row['quantity']=$num;
-                }
-
-        }
-?>
 <br></br>
 <h2>Pending Orders</h2>
 <form action='' method='post'>
 <input type="submit" name="orders" value="View Pending Orders"/>
 </form>
 <?php
-        if($_SERVER['REQUEST_METHOD'] == "POST" and isset($_POST['orders'])){
+		    
+if($_SERVER['REQUEST_METHOD'] == "POST" and isset($_POST['orders'])){
         //      $result = mysqli_query($conn, "select * from Cart where orderStatus = 'P'");
                 $result = mysqli_query($conn, "select * from Transaction T natural join Cart C join Product on T.ProductId=Product.productId  where orderStatus='P';");
                 while($row = mysqli_fetch_assoc($result)) {
-                        echo '<p><b>Order ID</b>: '.$row['OrderId'].'   <b>Transaction Date</b>: '.$row['TransactionDate'].'   <b>Customer Id</b>: '.$row["Username"].'   <b>Product Name</b>: '.$row["name"].'   <b>Quantity</b>: '.$row['quantity'].'   <b>Cost</b>: '.$row['cost'].'</p>';
+                        echo '<p><b>Order ID</b>: '.$row['OrderId'].' |   <b>Transaction Date</b>: '.$row['TransactionDate'].' |   <b>Customer Id</b>: '.$row["Username"].' |   <b>Product Name</b>: '.$row["name"].' |   <b>Quantity</b>: '.$row['quantity'].' |   <b>Cost</b>: '.$row['cost'].'</p>';
                 }
         }
 ?>

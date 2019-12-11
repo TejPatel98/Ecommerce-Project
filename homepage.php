@@ -132,7 +132,6 @@ body {
   <div class="topnav-right">
 	<a href="./index.html">Log Out</a> 
   </div>
-  <div class='image' align="center"><img src='./logo.png' align="left"></div>
 </div>
 
 <form action='#' method=POST align="right">
