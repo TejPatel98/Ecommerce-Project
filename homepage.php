@@ -133,6 +133,8 @@ body {
 	<a href="./index.html">Log Out</a> 
   </div>
 </div>
+  <div class='image' align="center"><img src='./logo.png' align="center"></div>
+
 <form action='#' method=POST align="right">
 <select name="chosenCategory">
 
