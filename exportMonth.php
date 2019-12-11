@@ -1,14 +1,14 @@
 <?php
 include('connect.php');
-$result = mysqli_query($conn, "select Username, OrderId, transactionId, ProductId, quantity, orderStatus from Transaction natural join Cart;");
+$result = mysqli_query($conn, "select * from Transaction natural join Cart where TransactionDate >= DATE_ADD(current_date(), interval -30 day);");
                 $delim = ",";
-                $filename = "data.csv";
+                $filename = "data_month.csv";
                 $f = fopen('php://output', 'w');
-                $fields = array('Username', 'OrderId', 'transactionId', 'ProductId', 'quantity');
+                $fields = array('Username', 'OrderId', 'transactionId', 'ProductId', 'quantity', 'TransactionDate');
                 fputcsv($f, $fields, $delim);
 
                 while ($row = mysqli_fetch_assoc($result)){
-                        $line = array($row['Username'], $row['OrderId'], $row['transactionId'], $row['ProductId'], $row['quantity']);
+                        $line = array($row['Username'], $row['OrderId'], $row['transactionId'], $row['ProductId'], $row['quantity'], $row['TransactionDate']);
                         fputcsv($f, $line, $delim);
                 }
 

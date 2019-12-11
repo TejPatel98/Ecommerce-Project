@@ -138,8 +138,10 @@
             <p>View and update inventory, ship pending orders, and view sales statistics and promotions below.</p>
 	<br />  
                 <form method="post" action="" align="center">  
-		     <a href="export.php" type="submit" name="exportAll" value="CSV Export all data" align="center" class="btn btn-success pull-right" />Download All Data</a>
-			
+		     <a href="exportWeek.php" type="submit" name="exportWeek" value="CSV Export week data" align="center" class="btn btn-success " >Download Past Week's Data</a>
+		     <a href="exportMonth.php" type="submit" name="exportMonth" value="CSV Export month data" align="center" class="btn btn-success " >Download Past Month's Data</a>
+		     <a href="exportYear.php" type="submit" name="exportYear" value="CSV Export year data" align="center" class="btn btn-success " >Download Past Year's Data</a>
+		     <a href="export.php" type="submit" name="exportAll" value="CSV Export all data" align="center" class="btn btn-success" >Download All Data</a>
                 </form>  
          <br />    
 <?php
@@ -389,7 +391,6 @@ if(isset($_POST['submit'])){
         }
 }
 ?>
-	</div>
 <br></br>
 
 
@@ -436,6 +437,8 @@ if (in_array($selected_val, $past)){
 	while ($row = mysqli_fetch_assoc($individual_with_most_transactions)){
 		echo "<p> <b>Customer Id</b>: ".$row['individualId']." , <b>Username</b>: ".$row['username']." , <b>Email Address</b>: ".$row['email']."</p>";
 	}
+}
+/*
 	$data = array();
         $data_sql = "select * from (select distinct ProductId, sum(quantity) as j1 from Transaction natural join Cart where TransactionDate >= DATE_ADD(current_date(), interval ".$selected_val." day) group by ProductId) as t1 join Product on t1.ProductId = Product.productId;";
         $get_data = mysqli_query($conn, $data_sql);
@@ -444,39 +447,23 @@ if (in_array($selected_val, $past)){
                 $temp["x"] = $row['name'];
                 $temp["y"] = $row['j1'];
 		$data[] = $temp;
-	}
-?>
-<div id="chart_div"></div>
-<div id="chart_div1"></div>
-<div id="chart_div2"></div>
-
-	<br />  
-                <form method="post" action="" align="center">  
-                     <input type="submit" name="exportChosen" value="CSV Export for the chosen time frame" class="btn btn-success" />  
-                </form>  
-         <br />    
-<?php
-	if($_SERVER['REQUEST_METHOD'] == "POST" and isset($_POST["exportChosen"]))  
-	 {  
-	   /*   header('Content-Type: text/csv; charset=utf-8');  
-	      header('Content-Disposition: attachment; filename=data.csv');  
-	      $output = fopen("php://output", "w");  
-	      fputcsv($output, array('Username', 'OrderId', 'TransactionId', 'ProductId', 'quantity', 'OrderStatus'));  
-	      $query = "select Username, OrderId, transactionId, ProductId, quantity, orderStatus from Transaction natural join Cart where TransactionDate >= DATE_ADD(current_date(), interval ".$selected_val." day);";  
-	      $result = mysqli_query($conn, $query);  
-	      while($row = mysqli_fetch_assoc($result))  
-	      {  
-		   fputcsv($output, $row);  
-	      }  
-	      fclose($output);*/  
-		echo "helloo";
-	}  
-?>
-<?php
-}
+	}*/
 }
 ?>
 
+<form method="post" action="" align="center">
+	<input type="submit" name="graphicalData" value="graphicalValue">
+</form>
+<?php
+if(isset($_POST['graphicalData'])){?>
+	<div id="chart_div"></div>
+	<div id="chart_div1"></div>
+	<div id="chart_div2"></div>
+<?php 
+}
 
+?>
+
+</div>
 </body>
 </html>
