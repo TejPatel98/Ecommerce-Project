@@ -1,29 +1,22 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+  </head>
+  <body class='container'>
 <?php
 include('connect.php');
-/*
-$servername = "localhost";
-$username = "tej";
-$password = "hellophpworld";
-$dbname = "eCommerce";
 
-echo "You are employee!";
-
-// Create connection 
-$conn = new mysqli($servername, $username, $password, $dbname);
-
-// Check connection 
-if (!$conn){
-        die("Connection failed: " . mysqli_connect_error());
-}
- */
 $sql = "select * from Product;";
 $result = mysqli_query($conn, $sql);
 $data = array();
 ?>
 <h1>Employee Page</h1>
-<form action='/Ecommerce-Project/index.html' method='post'><input type="submit" name="logout" value="Log Out"></input></form>
+<form action='/Ecommerce-Project/index.html' method='post'><input type="submit" class ="btn" name="logout" value="Log Out"></input></form>
 <h2>Inventory</h2>
-<table id="inventory" border="0" cellspacing="2" cellpadding="2">
+<table class='table table-dark' id="inventory" border="0" cellspacing="2" cellpadding="2">
       <tr>
 	<td> <font face="Arial">ProductId</font> </td>
 	<td> <font face="Arial">Name</font> </td>
@@ -40,8 +33,8 @@ while ($row = mysqli_fetch_assoc($result)) {
 		<td>'.$row['name'].'</td>
         	<td>'.$row['cost'].'</td>
 		<form action="" method="post"><td>
-		<input type="text" placeholder="'.$row['Quantity'].'" name="temp" maxlength="3" size="3"/>
-		<input type="submit" name="update" value="Update"/>
+		<input type="text" class="" placeholder="'.$row['Quantity'].'" name="temp" maxlength="3" size="3"/>
+		<input type="submit" class="btn btn-success" name="update" value="Update"/>
 		<input type="hidden" name="productId" value="'.$row['productId'].'"/>
 		</td></form>
 		</tr>';
@@ -66,7 +59,7 @@ while ($row = mysqli_fetch_assoc($result)) {
 ?>
 <h2>Pending Orders</h2>
 <form action='' method='post'>
-<input type="submit" name="orders" value="View Pending Orders"/>
+<input type="submit" class="btn" name="orders" value="View Pending Orders"/>
 </form>
 <?php
 	if($_SERVER['REQUEST_METHOD'] == "POST" and isset($_POST['orders'])){
@@ -81,7 +74,7 @@ while ($row = mysqli_fetch_assoc($result)) {
 <h2>Ship Orders</h2>
 <form action='' method='post'>
   Order ID: <input type="text" name="orderID" size="15">
-  <input type="submit" name="ship" value="Submit">
+  <input type="submit" class="btn" name="ship" value="Submit">
 </form>
 
 
@@ -111,7 +104,7 @@ if(isset($_POST['ship'])){
  <!-- Product Status: <input type="text" name="productStatus" size="1" maxlength="1">-->
   Cost: <input type="text" name="cost" size="6">
   Image Name: <input type="text" name="image" placeholder="Include .jpg" size="15">
-  <input type="submit" name="submit" value="Submit">
+  <input type="submit" class="btn" name="submit" value="Submit">
 </form>
 
 
@@ -129,3 +122,5 @@ if(isset($_POST['submit'])){
 	}
 }
 ?>
+</body>
+</html>
