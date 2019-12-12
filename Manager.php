@@ -142,7 +142,8 @@
 		     <a href="exportMonth.php" type="submit" name="exportMonth" value="CSV Export month data" align="center" class="btn btn-success " >Download Past Month's Data</a>
 		     <a href="exportYear.php" type="submit" name="exportYear" value="CSV Export year data" align="center" class="btn btn-success " >Download Past Year's Data</a>
 		     <a href="export.php" type="submit" name="exportAll" value="CSV Export all data" align="center" class="btn btn-success" >Download All Data</a>
-                </form>  
+		     <a href="http://172.31.148.24/Ecommerce-Project/index.html" type="submit" name="out"  class="btn btn-success pull-right" >Log Out</a>
+		</form>  
          <br />    
 <?php
 /*	if (isset($_POST['exportAll'])) {
