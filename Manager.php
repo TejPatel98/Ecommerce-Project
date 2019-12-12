@@ -166,12 +166,6 @@
  */
 
 
-
-
-
-
-
-
 /*   if($_SERVER['REQUEST_METHOD'] == "POST" and isset($_POST["exportAll"])){
 			      $output = fopen("data.csv", "w");  
 			      fputcsv($output, array('Username', 'OrderId', 'TransactionId', 'ProductId', 'quantity', 'OrderStatus'));  
@@ -217,10 +211,6 @@
 
 ?>
 	 
-
-
-
-
 	<h3>Inventory</h3>
             <form method="POST">       
                 <table class="table table-dark">
