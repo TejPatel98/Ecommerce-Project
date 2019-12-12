@@ -263,7 +263,7 @@
                         </script>
                     </tbody>
                 </table>
-                <button type="submit" class="btn btn-primary" name="updateBtn">Update Promotions</button>
+                <button type="submit" class="btn btn-secondary" name="updateBtn">Update Promotions</button>
             </form>
             <?php
                 if (isset($_POST["updateBtn"])){
@@ -294,7 +294,7 @@
 <br></br>
 <h2>Pending Orders</h2>
 <form action='' method='post'>
-<input type="submit" name="orders" value="View Pending Orders"/>
+<input type="submit" class="btn btn-secondary" name="orders" value="View Pending Orders"/>
 </form>
 <?php
 		    
@@ -308,9 +308,9 @@ if($_SERVER['REQUEST_METHOD'] == "POST" and isset($_POST['orders'])){
 ?>
 <br></br>
 <h2>Ship Orders</h2>
-<form action='' method='post'>
-  Order ID: <input type="text" name="orderID" size="15">
-  <input type="submit" name="ship" value="Submit">
+<form action='' class="form-group" method='post'>
+  Order ID: <input type="text" class="form-control" name="orderID" size="15">
+  <input type="submit" class="btn btn-success" name="ship" value="Submit">
 </form>
 
 
@@ -334,13 +334,13 @@ if(isset($_POST['ship'])){
 <br></br>
 
 <h2>Add Inventory Item</h2>
-<form action='' method='post'>
-  Product Name: <input type="text" name="name" size="15">
-  Keyword: <textarea name="keywords" rows="2" columns="10"></textarea>
+<form action='' class="form-group" method='post'>
+  Product Name: <input type="text" class="form-control" name="name" size="15">
+  Keyword: <input type="text" class="form-control" name="name" size="15">
  <!-- Product Status: <input type="text" name="productStatus" size="1" maxlength="1">-->
-  Cost: <input type="text" name="cost" size="6">
-  Image Name: <input type="text" name="image" placeholder="Include .jpg" size="15">
-  <input type="submit" name="submit" value="Submit">
+  Cost: <input type="text" class="form-control" name="cost" size="6">
+  Image Name: <input type="text" class="form-control" name="image" placeholder="Include .jpg" size="15">
+  <input type="submit" class="btn btn-success" name="submit" value="Submit">
 </form>
 
 
@@ -365,15 +365,15 @@ if(isset($_POST['submit'])){
 <?php
 $past = array(-7,-31,-365);
 ?>
-<form action='#' method=POST>
-<select name="past">
+<form action='#' class="form-group" method=POST>
+<select class="form-control" name="past">
 
         <option default value="none">None</option>
 	<option value="<?php echo $past[0];?>">Past Week</option>
 	<option value="<?php echo $past[1];?>">Past Month</option>
 	<option value="<?php echo $past[2];?>">Past Year</option>
 </select>
-<input type="submit" name="submit" value="Submit" />
+<input type="submit" class="btn btn-success" name="submit" value="Submit" />
 </form>
 
 <?php
@@ -419,7 +419,7 @@ if (in_array($selected_val, $past)){
 ?>
 
 <form method="post" action="" align="center">
-	<input type="submit" name="graphicalData" value="graphicalValue">
+	<input type="submit" class="btn btn-secondary" name="graphicalData" value="graphicalValue">
 </form>
 <?php
 if(isset($_POST['graphicalData'])){?>
