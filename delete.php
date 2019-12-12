@@ -7,7 +7,7 @@ echo $foobar[3];
 
 $bar="SET FOREIGN_KEY_CHECKS = 0;";
 $bar1="delete from Cart where orderId=".$foobar[1].";";
-$bar2="delete from Transaction where OrderId=".$foobar[1].";";
+$bar2="delete from Transaction where orderId=".$foobar[1].";";
 $bar3="SET FOREIGN_KEY_CHECKS = 1;";
 $value = mysqli_query($conn, $bar);
 $value1 = mysqli_query($conn, $bar1);
@@ -21,6 +21,11 @@ if ($value and $value1 and $value2 and $value3){
 	exit;
 }
 else{
+	echo $value;
+	echo $value1;
+	echo $value2;
+	echo $value3;
+
 	echo "ERROR !";
 }
 

@@ -20,7 +20,11 @@ body {
   margin: 0;
   font-family: Arial, Helvetica, sans-serif;
 }
-
+.center {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
 .topnav {
   overflow: hidden;
   background-color: #e9e9e9;
@@ -84,22 +88,23 @@ body {
   </div>
 </div>
 
-<h1>Congrtulations!</h1>
-<img src="keep-calm-your-order-has-been-placed.png" alt="Simply Easy Learning"  width="200"
-	 height="200" align="middle">
+<h1 align="middle">Congrtulations!</h1>
+<img src="keep-calm-your-order-has-been-placed.png" width="200"
+	 height="200" class="center">
+<p></p>
 <form action = ""  method = "post">
-<input type="submit" name="History" value="History"/>
-<input type="submit" name="Cancel" value="Orders that could be cancelled"/>
+<input type="submit" name="History" value="History" class="center">
+<input type="submit" name="Cancel" value="Orders that could be cancelled" class="center">
 </form>
 
-<h3>Username - <?php echo $identification; ?></h3>
+<h3 align="middle">Username - <?php echo $identification; ?></h3>
 
 <?php
 
 if(isset($_POST['History'])){
 	$history = "select * from Transaction T natural join Product P join Cart on T.OrderId=Cart.OrderId where T.Username='".$identification."';";
 	$result = mysqli_query($conn, $history);
-	echo '<table border="1" cellspacing="1" cellpadding="4"> 
+	echo '<table border="1" cellspacing="1" cellpadding="4" align="center"> 
       <tr> 
           <td> <font face="Arial">Order Id</font> </td> 
           <td> <font face="Arial">Name of the Product</font> </td> 
@@ -125,7 +130,7 @@ if(isset($_POST['History'])){
 elseif(isset($_POST['Cancel'])){
 	$one_day_sql="select * from Transaction natural join Cart join Product on Transaction.ProductId=Product.productId where Transaction.Username='".$identification."' and Transaction.TransactionDate >= DATE_ADD(current_date(), interval -1 day);";
 	$result = mysqli_query($conn, $one_day_sql);
-	echo '<table border="1" cellspacing="1" cellpadding="4"> 
+	echo '<table border="1" cellspacing="1" cellpadding="4" align="center"> 
       <tr> 
           <td> <font face="Arial">Order Id</font> </td> 
 	  <td> <font face="Arial">Product Name</font> </td> 
