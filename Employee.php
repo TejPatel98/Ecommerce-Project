@@ -13,8 +13,13 @@ $sql = "select * from Product;";
 $result = mysqli_query($conn, $sql);
 $data = array();
 ?>
-<h1>Employee Page</h1>
-<form action='/Ecommerce-Project/index.html' method='post'><input type="submit" class ="btn" name="logout" value="Log Out"></input></form>
+<div style="margin: 5px; padding: 5px;">
+  <h1>Employee Page</h1>
+  <p>Welcome valued employee! Go ahead and start work! </p>
+  <form action='/Ecommerce-Project/index.html' method='post'><input type="submit" class ="btn btn-secondary" name="logout" value="Log Out"></input></form>
+</div>
+
+<div style="margin: 5px; padding: 5px;">
 <h2>Inventory</h2>
 <table class='table table-dark' id="inventory" border="0" cellspacing="2" cellpadding="2">
       <tr>
@@ -57,9 +62,13 @@ while ($row = mysqli_fetch_assoc($result)) {
 
 	}
 ?>
+</div>
+
+
+<div style="margin: 5px; padding: 5px;">
 <h2>Pending Orders</h2>
 <form action='' method='post'>
-<input type="submit" class="btn" name="orders" value="View Pending Orders"/>
+<input type="submit" class="btn btn-secondary" name="orders" value="View Pending Orders"/>
 </form>
 <?php
 	if($_SERVER['REQUEST_METHOD'] == "POST" and isset($_POST['orders'])){
@@ -70,13 +79,14 @@ while ($row = mysqli_fetch_assoc($result)) {
 		}
 	}
 ?>
+</div>
 
+<div style="margin: 5px; padding: 5px;">
 <h2>Ship Orders</h2>
 <form action='' method='post'>
-  Order ID: <input type="text" name="orderID" size="15">
-  <input type="submit" class="btn" name="ship" value="Submit">
+  Order ID: <input type="text" class="form-control" name="orderID" size="15">
+  <input type="submit" class="btn btn-success" name="ship" value="Submit">
 </form>
-
 
 
 <?php
@@ -90,23 +100,18 @@ if(isset($_POST['ship'])){
 	}
 }
 ?>
+</div>
 
-
-
-
-
-
-
+<div style="margin: 5px; padding: 5px;">
 <h2>Add Inventory Item</h2>
-<form action='' method='post'>
-  Product Name: <input type="text" name="name" size="15">
-  Keywords: <textarea name="keywords" rows="2" columns="10"></textarea>
+<form action='' class="form-group" method='post'>
+  Product Name: <input type="text" class="form-control" name="name" size="15">
+  Keyword: <input type="text" class="form-control" name="name" size="15">
  <!-- Product Status: <input type="text" name="productStatus" size="1" maxlength="1">-->
-  Cost: <input type="text" name="cost" size="6">
-  Image Name: <input type="text" name="image" placeholder="Include .jpg" size="15">
-  <input type="submit" class="btn" name="submit" value="Submit">
+  Cost: <input type="text" class="form-control" name="cost" size="6">
+  Image Name: <input type="text" class="form-control" name="image" placeholder="Include file-type (ex. .jpg)" size="15">
+  <input type="submit" class="btn btn-success" name="submit" value="Submit">
 </form>
-
 
 
 <?php
@@ -122,5 +127,6 @@ if(isset($_POST['submit'])){
 	}
 }
 ?>
+</div>
 </body>
 </html>
