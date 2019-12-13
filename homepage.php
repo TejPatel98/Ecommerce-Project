@@ -224,7 +224,7 @@ else{
 ?>
 </div>
 
-<div style="width:700px; margin:50 auto;">
+<div style="width:90%; margin:50 auto;">
 
 <?php
 if(!empty($_SESSION["shopping_cart"])) {

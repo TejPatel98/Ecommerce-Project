@@ -241,7 +241,7 @@ include('connect.php');
                     <td>' . $row['name'] . '</td>
                     <td>$' . $row['cost'] . '</td>
                     <td>
-                      <input type="text" placeholder="' . $row['quantity'] . '" name="temp'.$row['productId'].'" maxlength="3" size="3"/>
+                      <input type="text" placeholder="' . $row['Quantity'] . '" name="temp'.$row['productId'].'" maxlength="3" size="3"/>
                     </td>
 
                     <td>
@@ -304,7 +304,7 @@ include('connect.php');
         if ($conn->query($cost_query) != TRUE) {
           echo "Cost update failed: " . $conn->error;
         }
-        $quantity_query = "UPDATE Product SET quantity=$new_quantity WHERE productId=$product_id";
+        $quantity_query = "UPDATE Product SET Quantity=$new_quantity WHERE productId=$product_id";
         if ($conn->query($quantity_query) != TRUE && $new_quantity!=NULL) {
           echo "Quantity update failed: " . $conn->error;
         }
