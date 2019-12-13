@@ -150,7 +150,7 @@ elseif(isset($_POST['Cancel'])){
 			<td><?php echo $row['quantity'];?></td> 
                 	<td><?php echo $row['cost'] * $row['quantity'];?></td> 
 			<td><?php echo $os;?></td> 
-			<td><a href='delete.php?id="<?php echo $row['orderId'];?>"?identification="<?php echo $identification;?>"'>Cancel</a></td>
+			<td><a href='delete.php?id="<?php echo $row['OrderId'];?>"?identification="<?php echo $identification;?>"'>Cancel</a></td>
 		</tr>
 <?php	
 	}

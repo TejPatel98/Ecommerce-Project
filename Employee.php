@@ -50,7 +50,7 @@ while ($row = mysqli_fetch_assoc($result)) {
 </table>
 <?php
 
-	if($_SERVER['REQUEST_METHOD'] == "POST" and isset($_POST['update'])){
+	if(isset($_POST['update'])){
 	
 		$result = mysqli_query($conn, "select * from Product where productId = ".$_POST['productId']."");
 		while($row = mysqli_fetch_assoc($result)) { 
@@ -72,7 +72,7 @@ while ($row = mysqli_fetch_assoc($result)) {
 <input type="submit" class="btn btn-secondary" name="orders" value="View Pending Orders"/>
 </form>
 <?php
-	if($_SERVER['REQUEST_METHOD'] == "POST" and isset($_POST['orders'])){
+	if(isset($_POST['orders'])){
 	//	$result = mysqli_query($conn, "select * from Cart where orderStatus = 'P'");
 		$result = mysqli_query($conn, "select * from Transaction T natural join Cart C join Product on T.ProductId=Product.productId  where orderStatus='P';");
 		while($row = mysqli_fetch_assoc($result)) {
