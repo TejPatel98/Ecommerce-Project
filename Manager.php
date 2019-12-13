@@ -239,7 +239,7 @@ include('connect.php');
           while ($row = mysqli_fetch_assoc($result)) {
             echo '<tr>
                     <td>' . $row['name'] . '</td>
-                    <td>' . $row['cost'] . '</td>
+                    <td>$' . $row['cost'] . '</td>
                     <td>
                       <input type="text" placeholder="' . $row['quantity'] . '" name="temp'.$row['productId'].'" maxlength="3" size="3"/>
                     </td>
