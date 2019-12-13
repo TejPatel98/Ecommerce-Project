@@ -46,7 +46,7 @@
         echo '<tr>
                 <td>' . $row['productId'] . '</td>
                 <td>' . $row['name'] . '</td>
-                      <td>' . $row['cost'] . '</td>
+                      <td>$' . $row['cost'] . '</td>
                 <form action="" method="post"><td>
                 <input type="text" placeholder="' . $row['quantity'] . '" name="temp" maxlength="3" size="3"/>
                 <input type="submit" class="btn btn-success" name="update" value="Update"/>
