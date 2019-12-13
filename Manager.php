@@ -357,23 +357,24 @@ include('connect.php');
 
     <h2>Add Inventory Item</h2>
     <form action='' class="form-group" method='post'>
+      Product Id: <input type="text" class="form-control" name="id" size="15">
       Product Name: <input type="text" class="form-control" name="name" size="15">
       Keyword: <input type="text" class="form-control" name="name" size="15">
       <!-- Product Status: <input type="text" name="productStatus" size="1" maxlength="1">-->
       Cost: <input type="text" class="form-control" name="cost" size="6">
       Image Name: <input type="text" class="form-control" name="image" placeholder="Include .jpg" size="15">
-      <input type="submit" class="btn btn-success" name="submit" value="Submit">
+      <input type="submit" class="btn btn-success" name="submitProduct" value="Submit">
     </form>
 
 
 
     <?php
-    if (isset($_POST['submit'])) {
+    if (isset($_POST['submitProduct'])) {
       $val = "select max(productId) as newId from Product;";
       $value = mysqli_query($conn, $val);
       $temp = mysqli_fetch_assoc($value);
       $newVal = $temp["newId"] + 1;
-      $productAddition = "insert into Product values (" . $newVal . ", '" . $_POST["name"] . "', '" . $_POST["keywords"] . "', NULL, " . $_POST["cost"] . ", 1, '" . $_POST["image"] . "');";
+      $productAddition = "insert into Product values (" . intval($_POST["id"]) . ", '" . $_POST["name"] . "', '" . $_POST["keywords"] . "', NULL, " . $_POST["cost"] . ", 1, '" . $_POST["image"] . "');";
       $foo = mysqli_query($conn, $productAddition);
       if ($foo) {
         echo "The product has been Added!";
